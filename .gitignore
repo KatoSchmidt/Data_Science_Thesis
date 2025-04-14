@@ -54,8 +54,12 @@ datasets/convective_envelope_rsg/sim.mp4
 testing_before_adding/
 viz/
 venv_benchmark_well/
+# ignore my venv 
+the_well_venv/  
 wellbench/
 benchmarking_results/
+# ignore my experiments (only for local -> SURF)
+experiments/
 
 # Ignore logs and temporary files
 *.log
@@ -93,6 +97,8 @@ credentials.json
 *.min.js
 *.min.css
 __pycache__
+__pycache__/
+*.pyc
 
 # Ignore run generated output
 outputs/
