@@ -1,7 +1,9 @@
 defaults:
   - defaults
 
-epochs: 1
+epochs: 4
 val_frequency: 1
-loss_fn:
-  _target_: torch.nn.MSELoss
+short_validation_length: 4
+max_rollout_steps: 10
+num_time_intervals: 3
+
