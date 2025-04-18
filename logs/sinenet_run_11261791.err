@@ -1,0 +1,79 @@
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/hydra/_internal/defaults_list.py:251: UserWarning: In 'config': Defaults list is missing `_self_`. See https://hydra.cc/docs/1.2/upgrades/1.0_to_1.1/default_composition_order for more information
+  warnings.warn(msg, UserWarning)
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/hydra/_internal/defaults_list.py:251: UserWarning: In 'config': Defaults list is missing `_self_`. See https://hydra.cc/docs/1.2/upgrades/1.0_to_1.1/default_composition_order for more information
+  warnings.warn(msg, UserWarning)
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: kato-schmidt (kato-schmidt-university-of-amsterdam) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: kato-schmidt (kato-schmidt-university-of-amsterdam) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in experiments/turbulent_radiative_layer_2D-sinenet-SineNet-0.0002/5/wandb/run-20250418_141417-e9hrlmbv
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+wandb: ⭐️ View project at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test
+wandb: 🚀 View run at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/e9hrlmbv
+/gpfs/home4/kschmidt/the_well_sinenet/the_well/data/datamodule.py:115: DeprecationWarning: `use_normalization` parameter will be removed in a future version. For proper normalizing, set both use_normalization=True and normalization_type to either ZScoreNormalization or RMSNormalization.Default behavior is `normalization_type=ZScoreNormalization` and `use_normalization=True`.To switch off normalization instead, please set use_normalization=False in the config.yaml file
+  warnings.warn(
+wandb: creating run
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in experiments/turbulent_radiative_layer_2D-sinenet-SineNet-0.0002/5/wandb/run-20250418_141417-e9hrlmbv
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+wandb: ⭐️ View project at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test
+wandb: 🚀 View run at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/e9hrlmbv
+/gpfs/home4/kschmidt/the_well_sinenet/the_well/data/datamodule.py:115: DeprecationWarning: `use_normalization` parameter will be removed in a future version. For proper normalizing, set both use_normalization=True and normalization_type to either ZScoreNormalization or RMSNormalization.Default behavior is `normalization_type=ZScoreNormalization` and `use_normalization=True`.To switch off normalization instead, please set use_normalization=False in the config.yaml file
+  warnings.warn(
+wandb: 409 encountered ({"errors":[{"message":"Error 1062 (23000): Duplicate entry '41471738-e9hrlmbv' for key 'runs.PRIMARY'","path":["upsertBucket"]}],"data":{"upsertBucket":null}}), retrying request
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+  0%|          | 0/12 [00:00<?, ?it/s]  0%|          | 0/12 [00:00<?, ?it/s]
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 170, in main
+    train(
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 120, in train
+    trainer.train()
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 465, in train
+    val_loss, val_loss_dict = self.validation_loop(
+                              ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 353, in validation_loop
+    new_losses, new_time_logs = self.split_up_losses(
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 291, in split_up_losses
+    time_steps = loss_values.shape[0]  # we already average over batch
+                 ~~~~~~~~~~~~~~~~~^^^
+IndexError: tuple index out of range
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+  0%|          | 0/12 [00:00<?, ?it/s]  0%|          | 0/12 [00:00<?, ?it/s]
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 170, in main
+    train(
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 120, in train
+    trainer.train()
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 465, in train
+    val_loss, val_loss_dict = self.validation_loop(
+                              ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 353, in validation_loop
+    new_losses, new_time_logs = self.split_up_losses(
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 291, in split_up_losses
+    time_steps = loss_values.shape[0]  # we already average over batch
+                 ~~~~~~~~~~~~~~~~~^^^
+IndexError: tuple index out of range
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+srun: error: gcn105: task 0: Exited with exit code 1
+srun: Terminating StepId=11261791.0
+slurmstepd: error: *** STEP 11261791.0 ON gcn105 CANCELLED AT 2025-04-18T14:14:41 ***
+srun: error: gcn105: task 1: Terminated
+srun: Force Terminated StepId=11261791.0

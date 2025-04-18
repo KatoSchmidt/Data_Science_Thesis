@@ -142,14 +142,14 @@ def main(cfg: DictConfig):
     # Initiate wandb logging
     wandb_logged_cfg = OmegaConf.to_container(cfg, resolve=True)
     wandb_logged_cfg["experiment_folder"] = experiment_folder
-    if cfg.get("use_wandb", True):
-        wandb.init(
-            dir=experiment_folder,
-            project=cfg.wandb_project_name,
-            group=f"{cfg.data.well_dataset_name}",
-            config=wandb_logged_cfg,
-            name=experiment_name,
-            resume=True,
+    
+    wandb.init(
+        dir=experiment_folder,
+        project=cfg.wandb_project_name,
+        group=f"{cfg.data.well_dataset_name}",
+        config=wandb_logged_cfg,
+        name=experiment_name,
+        resume=True,
         )
 
     # Retrieve multiple processes context to setup DDP

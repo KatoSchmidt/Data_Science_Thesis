@@ -149,7 +149,6 @@ class ZScoreNormalization:
 
         mean_values = self.flattened_means[mode].to(x.device)
         std_values = self.flattened_stds[mode].to(x.device)
-
         assert x.shape[-1] == mean_values.shape[-1], (
             f"Channel mismatch: expected {mean_values.shape[-1]}, got {x.shape[-1]}"
         )
@@ -163,7 +162,7 @@ class ZScoreNormalization:
 
         mean_values = self.flattened_means_delta[mode].to(x.device)
         std_values = self.flattened_stds_delta[mode].to(x.device)
-
+        
         assert x.shape[-1] == mean_values.shape[-1], (
             f"Channel mismatch: expected {mean_values.shape[-1]}, got {x.shape[-1]}"
         )

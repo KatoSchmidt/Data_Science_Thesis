@@ -242,7 +242,9 @@ class Trainer:
             if not train:
                 ### AANPASSING
                 if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
+                    y_pred = self.formatter.process_output_denormalize(y_pred)
                     y_pred = self.dset_norm.denormalize_flattened(y_pred, "variable")  # of .inverse() als dat beschikbaar is
+                    y_pred = self.formatter.process_output_after_denomalize(y_pred)
                 else:
                     moving_batch, y_pred = self.denormalize(moving_batch, y_pred)
             if (not train) and self.is_delta:
@@ -285,6 +287,7 @@ class Trainer:
     def split_up_losses(self, loss_values, loss_name, dset_name, field_names):
         new_losses = {}
         time_logs = {}
+        print("LOSS SHAPE DEBUG:", loss_values.shape)
         time_steps = loss_values.shape[0]  # we already average over batch
         num_time_intervals = min(time_steps, self.num_time_intervals)
         temporal_loss_intervals = np.linspace(0, np.log(time_steps), num_time_intervals)
@@ -338,12 +341,15 @@ class Trainer:
                 for loss_fn in self.validation_suite:
                     # Mean over batch and time per field
                     loss = loss_fn(y_pred, y_ref, self.dset_metadata)
+
                     # Some losses return multiple values for efficiency
                     if not isinstance(loss, dict):
                         loss = {loss_fn.__class__.__name__: loss}
+                        
                     # Split the losses and update the logging dictionary
                     for k, v in loss.items():
                         sub_loss = v.mean(0)
+
                         new_losses, new_time_logs = self.split_up_losses(
                             sub_loss, k, dset_name, field_names
                         )

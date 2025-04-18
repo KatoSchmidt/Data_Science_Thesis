@@ -1,0 +1,45 @@
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/hydra/_internal/defaults_list.py:251: UserWarning: In 'config': Defaults list is missing `_self_`. See https://hydra.cc/docs/1.2/upgrades/1.0_to_1.1/default_composition_order for more information
+  warnings.warn(msg, UserWarning)
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/hydra/_internal/defaults_list.py:251: UserWarning: In 'config': Defaults list is missing `_self_`. See https://hydra.cc/docs/1.2/upgrades/1.0_to_1.1/default_composition_order for more information
+  warnings.warn(msg, UserWarning)
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: kato-schmidt (kato-schmidt-university-of-amsterdam) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Currently logged in as: kato-schmidt (kato-schmidt-university-of-amsterdam) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in experiments/turbulent_radiative_layer_2D-sinenet-SineNet-0.0002/2/wandb/run-20250418_134927-53admcs3
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+wandb: ⭐️ View project at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test
+wandb: 🚀 View run at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/53admcs3
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in experiments/turbulent_radiative_layer_2D-sinenet-SineNet-0.0002/2/wandb/run-20250418_134927-53admcs3
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+wandb: ⭐️ View project at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test
+wandb: 🚀 View run at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/53admcs3
+/gpfs/home4/kschmidt/the_well_sinenet/the_well/data/datamodule.py:115: DeprecationWarning: `use_normalization` parameter will be removed in a future version. For proper normalizing, set both use_normalization=True and normalization_type to either ZScoreNormalization or RMSNormalization.Default behavior is `normalization_type=ZScoreNormalization` and `use_normalization=True`.To switch off normalization instead, please set use_normalization=False in the config.yaml file
+  warnings.warn(
+/gpfs/home4/kschmidt/the_well_sinenet/the_well/data/datamodule.py:115: DeprecationWarning: `use_normalization` parameter will be removed in a future version. For proper normalizing, set both use_normalization=True and normalization_type to either ZScoreNormalization or RMSNormalization.Default behavior is `normalization_type=ZScoreNormalization` and `use_normalization=True`.To switch off normalization instead, please set use_normalization=False in the config.yaml file
+  warnings.warn(
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Error executing job with overrides: []
+Error executing job with overrides: []
+Error in call to target 'the_well.benchmark.models.sinenet.SineNet':
+TypeError("sinenet.__init__() missing 2 required positional arguments: 'time_history' and 'time_future'")
+full_key: model
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+Error in call to target 'the_well.benchmark.models.sinenet.SineNet':
+TypeError("sinenet.__init__() missing 2 required positional arguments: 'time_history' and 'time_future'")
+full_key: model
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+srun: error: gcn105: task 1: Exited with exit code 1
+srun: Terminating StepId=11261520.0
+slurmstepd: error: *** STEP 11261520.0 ON gcn105 CANCELLED AT 2025-04-18T13:49:32 ***
+srun: error: gcn105: task 0: Terminated
+srun: Force Terminated StepId=11261520.0

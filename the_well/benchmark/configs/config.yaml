@@ -6,7 +6,6 @@ defaults:
   - server: local
   - resume_overrides: no_overrides
 
-use_wandb: false
 wandb_project_name: "the_well_sinenet_test"
 
 epochs: 4

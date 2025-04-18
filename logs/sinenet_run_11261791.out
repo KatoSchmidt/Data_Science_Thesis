@@ -1,0 +1,799 @@
+[2025-04-18 14:14:17,124][the_well][INFO] - Run experiment turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+[2025-04-18 14:14:17,124][the_well][INFO] - Run experiment turbulent_radiative_layer_2D-sinenet-SineNet-0.0002
+[2025-04-18 14:14:17,127][the_well][INFO] - Configuration:
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 8
+  well_base_path: /home/kschmidt/the_well/datasets/
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  include_filters:
+  - turbulent_radiative_layer_tcool_0.03.hdf5
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: ${data.n_steps_input}
+  time_future: ${data.n_steps_output}
+  hidden_channels: 42
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 2
+  num_blocks: 1
+  norm: true
+  mult: 1.2
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+trainer:
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 4
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 4
+  max_rollout_steps: 10
+  num_time_intervals: 3
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  checkpoint_path: ''
+  formatter: sinenet_formatter
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+wandb_project_name: the_well_sinenet_test
+epochs: 4
+val_frequency: 1
+short_validation_length: 4
+max_rollout_steps: 10
+num_time_intervals: 3
+data_workers: 0
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+_target_: the_well.benchmark.models.sinenet.SineNet
+n_input_scalar_components: 2
+n_input_vector_components: 1
+n_output_scalar_components: 2
+n_output_vector_components: 1
+time_history: 4
+time_future: 1
+hidden_channels: 42
+padding_mode: circular
+activation: gelu
+num_layers: 4
+num_waves: 1
+num_blocks: 1
+norm: true
+mult: 1.2
+name: sinenet
+
+[2025-04-18 14:14:17,127][the_well][INFO] - Configuration:
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 8
+  well_base_path: /home/kschmidt/the_well/datasets/
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  include_filters:
+  - turbulent_radiative_layer_tcool_0.03.hdf5
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: ${data.n_steps_input}
+  time_future: ${data.n_steps_output}
+  hidden_channels: 42
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 2
+  num_blocks: 1
+  norm: true
+  mult: 1.2
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+trainer:
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 4
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 4
+  max_rollout_steps: 10
+  num_time_intervals: 3
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  checkpoint_path: ''
+  formatter: sinenet_formatter
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+wandb_project_name: the_well_sinenet_test
+epochs: 4
+val_frequency: 1
+short_validation_length: 4
+max_rollout_steps: 10
+num_time_intervals: 3
+data_workers: 0
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+_target_: the_well.benchmark.models.sinenet.SineNet
+n_input_scalar_components: 2
+n_input_vector_components: 1
+n_output_scalar_components: 2
+n_output_vector_components: 1
+time_history: 4
+time_future: 1
+hidden_channels: 42
+padding_mode: circular
+activation: gelu
+num_layers: 4
+num_waves: 1
+num_blocks: 1
+norm: true
+mult: 1.2
+name: sinenet
+
+[2025-04-18 14:14:18,263][the_well][INFO] - Distributed training: False
+[2025-04-18 14:14:18,263][the_well][INFO] - Instantiate datamodule the_well.data.WellDataModule
+[2025-04-18 14:14:18,347][the_well][INFO] - Instantiate model the_well.benchmark.models.sinenet.SineNet
+circular
+# par: 1616514, M=1.2
+Channels: 42->50->60->72->87
+===========================================================================
+Layer (type:depth-idx)                             Param #
+===========================================================================
+SineNet                                            --
+├─GELU: 1-1                                        --
+├─Conv2d: 1-2                                      6,090
+├─ModuleList: 1-3                                  --
+│    └─ModuleList: 2-1                             --
+│    │    └─Down: 3-1                              --
+│    │    │    └─AvgPool2d: 4-1                    --
+│    │    │    └─ModuleList: 4-2                   --
+│    │    │    │    └─ConvBlock: 5-1               41,700
+│    │    │    └─Conv2d: 4-3                       2,150
+│    │    └─Down: 3-2                              --
+│    │    │    └─AvgPool2d: 4-4                    --
+│    │    │    └─ModuleList: 4-5                   --
+│    │    │    │    └─ConvBlock: 5-2               82,440
+│    │    │    └─Conv2d: 4-6                       3,060
+│    │    └─Down: 3-3                              --
+│    │    │    └─AvgPool2d: 4-7                    --
+│    │    │    └─ModuleList: 4-8                   --
+│    │    │    │    └─ConvBlock: 5-3               113,184
+│    │    │    └─Conv2d: 4-9                       4,392
+│    │    └─Down: 3-4                              --
+│    │    │    └─AvgPool2d: 4-10                   --
+│    │    │    └─ModuleList: 4-11                  --
+│    │    │    │    └─ConvBlock: 5-4               157,905
+│    │    │    └─Conv2d: 4-12                      6,351
+│    └─ModuleList: 2-2                             --
+│    │    └─Down: 3-5                              --
+│    │    │    └─AvgPool2d: 4-13                   --
+│    │    │    └─ModuleList: 4-14                  --
+│    │    │    │    └─ConvBlock: 5-5               41,700
+│    │    │    └─Conv2d: 4-15                      2,150
+│    │    └─Down: 3-6                              --
+│    │    │    └─AvgPool2d: 4-16                   --
+│    │    │    └─ModuleList: 4-17                  --
+│    │    │    │    └─ConvBlock: 5-6               82,440
+│    │    │    └─Conv2d: 4-18                      3,060
+│    │    └─Down: 3-7                              --
+│    │    │    └─AvgPool2d: 4-19                   --
+│    │    │    └─ModuleList: 4-20                  --
+│    │    │    │    └─ConvBlock: 5-7               113,184
+│    │    │    └─Conv2d: 4-21                      4,392
+│    │    └─Down: 3-8                              --
+│    │    │    └─AvgPool2d: 4-22                   --
+│    │    │    └─ModuleList: 4-23                  --
+│    │    │    │    └─ConvBlock: 5-8               157,905
+│    │    │    └─Conv2d: 4-24                      6,351
+├─ModuleList: 1-4                                  --
+│    └─ModuleList: 2-3                             --
+│    │    └─Up: 3-9                                --
+│    │    │    └─circular_interpolate: 4-25        --
+│    │    │    └─ModuleList: 4-26                  --
+│    │    │    │    └─ConvBlock: 5-9               150,120
+│    │    │    └─Conv2d: 4-27                      6,336
+│    │    └─Up: 3-10                               --
+│    │    │    └─circular_interpolate: 4-28        --
+│    │    │    └─ModuleList: 4-29                  --
+│    │    │    │    └─ConvBlock: 5-10              104,040
+│    │    │    └─Conv2d: 4-30                      4,380
+│    │    └─Up: 3-11                               --
+│    │    │    └─circular_interpolate: 4-31        --
+│    │    │    └─ModuleList: 4-32                  --
+│    │    │    │    └─ConvBlock: 5-11              72,300
+│    │    │    └─Conv2d: 4-33                      3,050
+│    │    └─Up: 3-12                               --
+│    │    │    └─circular_interpolate: 4-34        --
+│    │    │    └─ModuleList: 4-35                  --
+│    │    │    │    └─ConvBlock: 5-12              50,904
+│    │    │    └─Conv2d: 4-36                      2,142
+│    └─ModuleList: 2-4                             --
+│    │    └─Up: 3-13                               --
+│    │    │    └─circular_interpolate: 4-37        --
+│    │    │    └─ModuleList: 4-38                  --
+│    │    │    │    └─ConvBlock: 5-13              150,120
+│    │    │    └─Conv2d: 4-39                      6,336
+│    │    └─Up: 3-14                               --
+│    │    │    └─circular_interpolate: 4-40        --
+│    │    │    └─ModuleList: 4-41                  --
+│    │    │    │    └─ConvBlock: 5-14              104,040
+│    │    │    └─Conv2d: 4-42                      4,380
+│    │    └─Up: 3-15                               --
+│    │    │    └─circular_interpolate: 4-43        --
+│    │    │    └─ModuleList: 4-44                  --
+│    │    │    │    └─ConvBlock: 5-15              72,300
+│    │    │    └─Conv2d: 4-45                      3,050
+│    │    └─Up: 3-16                               --
+│    │    │    └─circular_interpolate: 4-46        --
+│    │    │    └─ModuleList: 4-47                  --
+│    │    │    │    └─ConvBlock: 5-16              50,904
+│    │    │    └─Conv2d: 4-48                      2,142
+├─Conv2d: 1-5                                      1,516
+===========================================================================
+Total params: 1,616,514
+Trainable params: 1,616,514
+Non-trainable params: 0
+===========================================================================
+[2025-04-18 14:14:19,796][the_well][INFO] - Instantiate optimizer torch.optim.AdamW
+[2025-04-18 14:14:19,800][the_well][INFO] - Instantiate learning rate scheduler the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+[2025-04-18 14:14:19,807][the_well][INFO] - Final configuration:
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 8
+  well_base_path: /home/kschmidt/the_well/datasets/
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  include_filters:
+  - turbulent_radiative_layer_tcool_0.03.hdf5
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: ${data.n_steps_input}
+  time_future: ${data.n_steps_output}
+  hidden_channels: 42
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 2
+  num_blocks: 1
+  norm: true
+  mult: 1.2
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+trainer:
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 4
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 4
+  max_rollout_steps: 10
+  num_time_intervals: 3
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  checkpoint_path: ''
+  formatter: sinenet_formatter
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+wandb_project_name: the_well_sinenet_test
+epochs: 4
+val_frequency: 1
+short_validation_length: 4
+max_rollout_steps: 10
+num_time_intervals: 3
+data_workers: 0
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+_target_: the_well.benchmark.models.sinenet.SineNet
+n_input_scalar_components: 2
+n_input_vector_components: 1
+n_output_scalar_components: 2
+n_output_vector_components: 1
+time_history: 4
+time_future: 1
+hidden_channels: 42
+padding_mode: circular
+activation: gelu
+num_layers: 4
+num_waves: 1
+num_blocks: 1
+norm: true
+mult: 1.2
+name: sinenet
+
+[2025-04-18 14:14:19,807][the_well][INFO] - Instantiate trainer the_well.benchmark.trainer.Trainer
+[2025-04-18 14:14:19,813][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: starting training
+[2025-04-18 14:14:20,748][the_well][INFO] - Distributed training: False
+[2025-04-18 14:14:20,748][the_well][INFO] - Instantiate datamodule the_well.data.WellDataModule
+[2025-04-18 14:14:20,797][the_well][INFO] - Instantiate model the_well.benchmark.models.sinenet.SineNet
+[2025-04-18 14:14:21,322][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 1/97: loss 12.844404220581055, total_time 1.5079784393310547, batch time 0.15584778785705566, forward time 0.6590182781219482, backward time 0.6931111812591553
+[2025-04-18 14:14:21,503][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 2/97: loss 11.383028984069824, total_time 0.1807386875152588, batch time 0.10871481895446777, forward time 0.02593517303466797, backward time 0.04608798027038574
+[2025-04-18 14:14:21,661][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 3/97: loss 10.381267547607422, total_time 0.15744996070861816, batch time 0.08546900749206543, forward time 0.025639772415161133, backward time 0.0463404655456543
+[2025-04-18 14:14:21,806][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 4/97: loss 8.390915870666504, total_time 0.14477229118347168, batch time 0.06522059440612793, forward time 0.028371572494506836, backward time 0.05117940902709961
+circular
+# par: 1616514, M=1.2
+Channels: 42->50->60->72->87
+===========================================================================
+Layer (type:depth-idx)                             Param #
+===========================================================================
+SineNet                                            --
+├─GELU: 1-1                                        --
+├─Conv2d: 1-2                                      6,090
+├─ModuleList: 1-3                                  --
+│    └─ModuleList: 2-1                             --
+│    │    └─Down: 3-1                              --
+│    │    │    └─AvgPool2d: 4-1                    --
+│    │    │    └─ModuleList: 4-2                   --
+│    │    │    │    └─ConvBlock: 5-1               41,700
+│    │    │    └─Conv2d: 4-3                       2,150
+│    │    └─Down: 3-2                              --
+│    │    │    └─AvgPool2d: 4-4                    --
+│    │    │    └─ModuleList: 4-5                   --
+│    │    │    │    └─ConvBlock: 5-2               82,440
+│    │    │    └─Conv2d: 4-6                       3,060
+│    │    └─Down: 3-3                              --
+│    │    │    └─AvgPool2d: 4-7                    --
+│    │    │    └─ModuleList: 4-8                   --
+│    │    │    │    └─ConvBlock: 5-3               113,184
+│    │    │    └─Conv2d: 4-9                       4,392
+│    │    └─Down: 3-4                              --
+│    │    │    └─AvgPool2d: 4-10                   --
+│    │    │    └─ModuleList: 4-11                  --
+│    │    │    │    └─ConvBlock: 5-4               157,905
+│    │    │    └─Conv2d: 4-12                      6,351
+│    └─ModuleList: 2-2                             --
+│    │    └─Down: 3-5                              --
+│    │    │    └─AvgPool2d: 4-13                   --
+│    │    │    └─ModuleList: 4-14                  --
+│    │    │    │    └─ConvBlock: 5-5               41,700
+│    │    │    └─Conv2d: 4-15                      2,150
+│    │    └─Down: 3-6                              --
+│    │    │    └─AvgPool2d: 4-16                   --
+│    │    │    └─ModuleList: 4-17                  --
+│    │    │    │    └─ConvBlock: 5-6               82,440
+│    │    │    └─Conv2d: 4-18                      3,060
+│    │    └─Down: 3-7                              --
+│    │    │    └─AvgPool2d: 4-19                   --
+│    │    │    └─ModuleList: 4-20                  --
+│    │    │    │    └─ConvBlock: 5-7               113,184
+│    │    │    └─Conv2d: 4-21                      4,392
+│    │    └─Down: 3-8                              --
+│    │    │    └─AvgPool2d: 4-22                   --
+│    │    │    └─ModuleList: 4-23                  --
+│    │    │    │    └─ConvBlock: 5-8               157,905
+│    │    │    └─Conv2d: 4-24                      6,351
+├─ModuleList: 1-4                                  --
+│    └─ModuleList: 2-3                             --
+│    │    └─Up: 3-9                                --
+│    │    │    └─circular_interpolate: 4-25        --
+│    │    │    └─ModuleList: 4-26                  --
+│    │    │    │    └─ConvBlock: 5-9               150,120
+│    │    │    └─Conv2d: 4-27                      6,336
+│    │    └─Up: 3-10                               --
+│    │    │    └─circular_interpolate: 4-28        --
+│    │    │    └─ModuleList: 4-29                  --
+│    │    │    │    └─ConvBlock: 5-10              104,040
+│    │    │    └─Conv2d: 4-30                      4,380
+│    │    └─Up: 3-11                               --
+│    │    │    └─circular_interpolate: 4-31        --
+│    │    │    └─ModuleList: 4-32                  --
+│    │    │    │    └─ConvBlock: 5-11              72,300
+│    │    │    └─Conv2d: 4-33                      3,050
+│    │    └─Up: 3-12                               --
+│    │    │    └─circular_interpolate: 4-34        --
+│    │    │    └─ModuleList: 4-35                  --
+│    │    │    │    └─ConvBlock: 5-12              50,904
+│    │    │    └─Conv2d: 4-36                      2,142
+│    └─ModuleList: 2-4                             --
+│    │    └─Up: 3-13                               --
+│    │    │    └─circular_interpolate: 4-37        --
+│    │    │    └─ModuleList: 4-38                  --
+│    │    │    │    └─ConvBlock: 5-13              150,120
+│    │    │    └─Conv2d: 4-39                      6,336
+│    │    └─Up: 3-14                               --
+│    │    │    └─circular_interpolate: 4-40        --
+│    │    │    └─ModuleList: 4-41                  --
+│    │    │    │    └─ConvBlock: 5-14              104,040
+│    │    │    └─Conv2d: 4-42                      4,380
+│    │    └─Up: 3-15                               --
+│    │    │    └─circular_interpolate: 4-43        --
+│    │    │    └─ModuleList: 4-44                  --
+│    │    │    │    └─ConvBlock: 5-15              72,300
+│    │    │    └─Conv2d: 4-45                      3,050
+│    │    └─Up: 3-16                               --
+│    │    │    └─circular_interpolate: 4-46        --
+│    │    │    └─ModuleList: 4-47                  --
+│    │    │    │    └─ConvBlock: 5-16              50,904
+│    │    │    └─Conv2d: 4-48                      2,142
+├─Conv2d: 1-5                                      1,516
+===========================================================================
+Total params: 1,616,514
+Trainable params: 1,616,514
+Non-trainable params: 0
+===========================================================================
+[2025-04-18 14:14:21,809][the_well][INFO] - Instantiate optimizer torch.optim.AdamW
+[2025-04-18 14:14:21,811][the_well][INFO] - Instantiate learning rate scheduler the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+[2025-04-18 14:14:21,816][the_well][INFO] - Final configuration:
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 8
+  well_base_path: /home/kschmidt/the_well/datasets/
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  include_filters:
+  - turbulent_radiative_layer_tcool_0.03.hdf5
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: ${data.n_steps_input}
+  time_future: ${data.n_steps_output}
+  hidden_channels: 42
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 2
+  num_blocks: 1
+  norm: true
+  mult: 1.2
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+trainer:
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 4
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 4
+  max_rollout_steps: 10
+  num_time_intervals: 3
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  checkpoint_path: ''
+  formatter: sinenet_formatter
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+wandb_project_name: the_well_sinenet_test
+epochs: 4
+val_frequency: 1
+short_validation_length: 4
+max_rollout_steps: 10
+num_time_intervals: 3
+data_workers: 0
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+_target_: the_well.benchmark.models.sinenet.SineNet
+n_input_scalar_components: 2
+n_input_vector_components: 1
+n_output_scalar_components: 2
+n_output_vector_components: 1
+time_history: 4
+time_future: 1
+hidden_channels: 42
+padding_mode: circular
+activation: gelu
+num_layers: 4
+num_waves: 1
+num_blocks: 1
+norm: true
+mult: 1.2
+name: sinenet
+
+[2025-04-18 14:14:21,816][the_well][INFO] - Instantiate trainer the_well.benchmark.trainer.Trainer
+[2025-04-18 14:14:21,822][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: starting training
+[2025-04-18 14:14:21,961][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 5/97: loss 4.259863376617432, total_time 0.15436315536499023, batch time 0.08131909370422363, forward time 0.02488422393798828, backward time 0.04815816879272461
+[2025-04-18 14:14:22,115][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 6/97: loss 5.577186584472656, total_time 0.15413379669189453, batch time 0.07190346717834473, forward time 0.026447057723999023, backward time 0.055782318115234375
+[2025-04-18 14:14:22,267][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 7/97: loss 4.405978679656982, total_time 0.15135455131530762, batch time 0.0701298713684082, forward time 0.0285952091217041, backward time 0.05262899398803711
+[2025-04-18 14:14:22,404][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 8/97: loss 4.657378196716309, total_time 0.1364130973815918, batch time 0.05422520637512207, forward time 0.028491497039794922, backward time 0.0536952018737793
+[2025-04-18 14:14:22,553][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 9/97: loss 3.116272449493408, total_time 0.14807939529418945, batch time 0.05153703689575195, forward time 0.03516960144042969, backward time 0.061371803283691406
+[2025-04-18 14:14:22,691][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 10/97: loss 5.530480861663818, total_time 0.13698625564575195, batch time 0.05141139030456543, forward time 0.02841329574584961, backward time 0.05716061592102051
+[2025-04-18 14:14:22,854][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 11/97: loss 5.536881446838379, total_time 0.1626300811767578, batch time 0.06716632843017578, forward time 0.03240561485290527, backward time 0.06305766105651855
+[2025-04-18 14:14:23,001][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 12/97: loss 4.118245601654053, total_time 0.14629554748535156, batch time 0.03728294372558594, forward time 0.037955522537231445, backward time 0.07105612754821777
+[2025-04-18 14:14:23,131][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 13/97: loss 3.630622148513794, total_time 0.12951898574829102, batch time 0.04202151298522949, forward time 0.029816627502441406, backward time 0.05767989158630371
+[2025-04-18 14:14:23,255][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 14/97: loss 4.090661525726318, total_time 0.12322521209716797, batch time 0.041895151138305664, forward time 0.028646469116210938, backward time 0.05268287658691406
+[2025-04-18 14:14:23,382][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 15/97: loss 2.6847047805786133, total_time 0.12688755989074707, batch time 0.04473400115966797, forward time 0.02840876579284668, backward time 0.053743600845336914
+[2025-04-18 14:14:23,515][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 16/97: loss 3.586261749267578, total_time 0.13264012336730957, batch time 0.0459141731262207, forward time 0.029366731643676758, backward time 0.05735898017883301
+[2025-04-18 14:14:23,596][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 1/97: loss 12.62839126586914, total_time 1.773216724395752, batch time 0.10871529579162598, forward time 0.647108793258667, backward time 1.0173914432525635
+[2025-04-18 14:14:23,649][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 17/97: loss 2.838829517364502, total_time 0.13317370414733887, batch time 0.060869455337524414, forward time 0.026633739471435547, backward time 0.0456697940826416
+[2025-04-18 14:14:23,782][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 2/97: loss 9.158866882324219, total_time 0.1855170726776123, batch time 0.06448149681091309, forward time 0.026282787322998047, backward time 0.09475159645080566
+[2025-04-18 14:14:23,808][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 18/97: loss 2.9588189125061035, total_time 0.15892314910888672, batch time 0.040956974029541016, forward time 0.05006265640258789, backward time 0.0679025650024414
+[2025-04-18 14:14:23,938][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 3/97: loss 10.713095664978027, total_time 0.15482759475708008, batch time 0.03762245178222656, forward time 0.025454282760620117, backward time 0.09174990653991699
+[2025-04-18 14:14:23,966][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 19/97: loss 2.2223873138427734, total_time 0.15712904930114746, batch time 0.041425466537475586, forward time 0.050348758697509766, backward time 0.0653531551361084
+[2025-04-18 14:14:24,092][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 4/97: loss 7.596355438232422, total_time 0.15421295166015625, batch time 0.03927445411682129, forward time 0.02483534812927246, backward time 0.09010195732116699
+[2025-04-18 14:14:24,123][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 20/97: loss 2.9142913818359375, total_time 0.15642833709716797, batch time 0.04120802879333496, forward time 0.052011728286743164, backward time 0.06320762634277344
+[2025-04-18 14:14:24,259][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 5/97: loss 2.3852806091308594, total_time 0.16588664054870605, batch time 0.04324007034301758, forward time 0.025686025619506836, backward time 0.09695935249328613
+[2025-04-18 14:14:24,283][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 21/97: loss 4.472991466522217, total_time 0.15950870513916016, batch time 0.03976774215698242, forward time 0.04931306838989258, backward time 0.07042717933654785
+[2025-04-18 14:14:24,426][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 6/97: loss 5.790388584136963, total_time 0.16723346710205078, batch time 0.04496908187866211, forward time 0.02542424201965332, backward time 0.09683895111083984
+[2025-04-18 14:14:24,450][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 22/97: loss 4.056817054748535, total_time 0.16719508171081543, batch time 0.046364784240722656, forward time 0.05058932304382324, backward time 0.07024002075195312
+[2025-04-18 14:14:24,587][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 7/97: loss 4.486063003540039, total_time 0.15972161293029785, batch time 0.037720680236816406, forward time 0.024995803833007812, backward time 0.09700393676757812
+[2025-04-18 14:14:24,611][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 23/97: loss 1.7934647798538208, total_time 0.1597585678100586, batch time 0.038265228271484375, forward time 0.05107879638671875, backward time 0.07041406631469727
+[2025-04-18 14:14:24,750][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 8/97: loss 6.328958511352539, total_time 0.16276860237121582, batch time 0.04272627830505371, forward time 0.024940967559814453, backward time 0.09510064125061035
+[2025-04-18 14:14:24,776][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 24/97: loss 2.432644844055176, total_time 0.16506052017211914, batch time 0.04723525047302246, forward time 0.04935193061828613, backward time 0.06847262382507324
+[2025-04-18 14:14:24,910][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 9/97: loss 3.9194016456604004, total_time 0.15949416160583496, batch time 0.037084102630615234, forward time 0.025002241134643555, backward time 0.09740686416625977
+[2025-04-18 14:14:24,934][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 25/97: loss 5.3101091384887695, total_time 0.15745997428894043, batch time 0.03735923767089844, forward time 0.04932117462158203, backward time 0.07077884674072266
+[2025-04-18 14:14:25,074][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 10/97: loss 4.148029804229736, total_time 0.1626129150390625, batch time 0.03651118278503418, forward time 0.027826547622680664, backward time 0.09827470779418945
+[2025-04-18 14:14:25,094][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 26/97: loss 1.7846131324768066, total_time 0.15993762016296387, batch time 0.03612923622131348, forward time 0.04801368713378906, backward time 0.07579398155212402
+[2025-04-18 14:14:25,233][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 11/97: loss 3.8871560096740723, total_time 0.1581282615661621, batch time 0.03590726852416992, forward time 0.024957895278930664, backward time 0.09726214408874512
+[2025-04-18 14:14:25,257][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 27/97: loss 4.331048965454102, total_time 0.1622469425201416, batch time 0.04045605659484863, forward time 0.05107855796813965, backward time 0.07071113586425781
+[2025-04-18 14:14:25,393][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 12/97: loss 3.03857159614563, total_time 0.15904808044433594, batch time 0.03637123107910156, forward time 0.025503873825073242, backward time 0.09717178344726562
+[2025-04-18 14:14:25,417][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 28/97: loss 2.7597150802612305, total_time 0.15918517112731934, batch time 0.03884172439575195, forward time 0.04945659637451172, backward time 0.07088613510131836
+[2025-04-18 14:14:25,557][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 13/97: loss 5.65283727645874, total_time 0.16352581977844238, batch time 0.037805795669555664, forward time 0.02748560905456543, backward time 0.09823346138000488
+[2025-04-18 14:14:25,577][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 29/97: loss 2.2055184841156006, total_time 0.15938377380371094, batch time 0.035369873046875, forward time 0.04830741882324219, backward time 0.07570576667785645
+[2025-04-18 14:14:25,722][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 14/97: loss 3.3610737323760986, total_time 0.16497540473937988, batch time 0.03688669204711914, forward time 0.02989053726196289, backward time 0.09819698333740234
+[2025-04-18 14:14:25,740][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 30/97: loss 2.64426589012146, total_time 0.16304373741149902, batch time 0.036421775817871094, forward time 0.04838156700134277, backward time 0.07823967933654785
+[2025-04-18 14:14:25,891][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 15/97: loss 6.782061576843262, total_time 0.16844964027404785, batch time 0.03675484657287598, forward time 0.03362393379211426, backward time 0.09806966781616211
+[2025-04-18 14:14:25,907][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 31/97: loss 2.4587769508361816, total_time 0.1664748191833496, batch time 0.035851240158081055, forward time 0.050038814544677734, backward time 0.08058404922485352
+[2025-04-18 14:14:26,058][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 16/97: loss 2.3405847549438477, total_time 0.16645264625549316, batch time 0.03602027893066406, forward time 0.03228640556335449, backward time 0.0981442928314209
+[2025-04-18 14:14:26,074][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 32/97: loss 2.390113353729248, total_time 0.1664717197418213, batch time 0.03659844398498535, forward time 0.049180030822753906, backward time 0.08069229125976562
+[2025-04-18 14:14:26,228][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 17/97: loss 4.204628944396973, total_time 0.1697835922241211, batch time 0.036468505859375, forward time 0.03502535820007324, backward time 0.09828853607177734
+[2025-04-18 14:14:26,242][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 33/97: loss 4.285789489746094, total_time 0.16772723197937012, batch time 0.03579401969909668, forward time 0.04874444007873535, backward time 0.08318781852722168
+[2025-04-18 14:14:26,401][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 18/97: loss 2.7466440200805664, total_time 0.1725902557373047, batch time 0.03621029853820801, forward time 0.03817009925842285, backward time 0.09820842742919922
+[2025-04-18 14:14:26,413][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 34/97: loss 2.2058022022247314, total_time 0.17062783241271973, batch time 0.03547525405883789, forward time 0.049469947814941406, backward time 0.08568191528320312
+[2025-04-18 14:14:26,581][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 19/97: loss 1.842525839805603, total_time 0.17951011657714844, batch time 0.038971900939941406, forward time 0.04228639602661133, backward time 0.0982508659362793
+[2025-04-18 14:14:26,589][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 35/97: loss 4.743589401245117, total_time 0.17532587051391602, batch time 0.03565192222595215, forward time 0.049214839935302734, backward time 0.09045815467834473
+[2025-04-18 14:14:26,759][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 20/97: loss 2.7729454040527344, total_time 0.17707180976867676, batch time 0.03619742393493652, forward time 0.0426487922668457, backward time 0.09822416305541992
+[2025-04-18 14:14:26,767][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 36/97: loss 2.6876273155212402, total_time 0.17715692520141602, batch time 0.0359039306640625, forward time 0.05075573921203613, backward time 0.09049630165100098
+[2025-04-18 14:14:26,939][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 21/97: loss 4.000789642333984, total_time 0.17990565299987793, batch time 0.03645014762878418, forward time 0.04531693458557129, backward time 0.09813714027404785
+[2025-04-18 14:14:26,945][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 37/97: loss 2.424553394317627, total_time 0.17779755592346191, batch time 0.03569817543029785, forward time 0.04926300048828125, backward time 0.09283566474914551
+[2025-04-18 14:14:27,122][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 22/97: loss 4.737885475158691, total_time 0.1823441982269287, batch time 0.03617715835571289, forward time 0.04811215400695801, backward time 0.0980539321899414
+[2025-04-18 14:14:27,126][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 38/97: loss 3.1313750743865967, total_time 0.18030977249145508, batch time 0.03589463233947754, forward time 0.04914402961730957, backward time 0.09527039527893066
+[2025-04-18 14:14:27,309][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 23/97: loss 3.100318670272827, total_time 0.1860651969909668, batch time 0.03789639472961426, forward time 0.049944400787353516, backward time 0.09822320938110352
+[2025-04-18 14:14:27,310][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 39/97: loss 5.738114833831787, total_time 0.1840066909790039, batch time 0.03732800483703613, forward time 0.04878377914428711, backward time 0.09789347648620605
+[2025-04-18 14:14:27,496][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 24/97: loss 2.1064376831054688, total_time 0.18645977973937988, batch time 0.038422346115112305, forward time 0.04972028732299805, backward time 0.09831571578979492
+[2025-04-18 14:14:27,497][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 40/97: loss 2.642564058303833, total_time 0.18656015396118164, batch time 0.039356231689453125, forward time 0.04913139343261719, backward time 0.09807133674621582
+[2025-04-18 14:14:27,679][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 25/97: loss 2.167379856109619, total_time 0.1831989288330078, batch time 0.03618168830871582, forward time 0.04900503158569336, backward time 0.09801125526428223
+[2025-04-18 14:14:27,681][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 41/97: loss 1.9578922986984253, total_time 0.1831679344177246, batch time 0.035852909088134766, forward time 0.04959726333618164, backward time 0.0977168083190918
+[2025-04-18 14:14:27,864][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 26/97: loss 2.0615358352661133, total_time 0.18437790870666504, batch time 0.03706049919128418, forward time 0.04896116256713867, backward time 0.09835529327392578
+[2025-04-18 14:14:27,866][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 42/97: loss 2.3057990074157715, total_time 0.18436980247497559, batch time 0.03582644462585449, forward time 0.05050516128540039, backward time 0.0980372428894043
+[2025-04-18 14:14:28,048][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 27/97: loss 3.276972770690918, total_time 0.18356895446777344, batch time 0.036529541015625, forward time 0.04902815818786621, backward time 0.09801030158996582
+[2025-04-18 14:14:28,050][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 43/97: loss 3.069552421569824, total_time 0.18361377716064453, batch time 0.036167144775390625, forward time 0.04967904090881348, backward time 0.09776687622070312
+[2025-04-18 14:14:28,233][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 28/97: loss 3.5481607913970947, total_time 0.18371891975402832, batch time 0.035712480545043945, forward time 0.049753665924072266, backward time 0.0982513427734375
+[2025-04-18 14:14:28,234][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 44/97: loss 2.0697553157806396, total_time 0.18373608589172363, batch time 0.036220550537109375, forward time 0.04954266548156738, backward time 0.09797191619873047
+[2025-04-18 14:14:28,417][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 29/97: loss 3.1044695377349854, total_time 0.18357396125793457, batch time 0.03616690635681152, forward time 0.049138545989990234, backward time 0.0982673168182373
+[2025-04-18 14:14:28,418][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 45/97: loss 1.9436005353927612, total_time 0.18360590934753418, batch time 0.036922454833984375, forward time 0.04866623878479004, backward time 0.09801554679870605
+[2025-04-18 14:14:28,599][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 30/97: loss 4.72715950012207, total_time 0.18187308311462402, batch time 0.03609967231750488, forward time 0.047598838806152344, backward time 0.09817361831665039
+[2025-04-18 14:14:28,603][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 46/97: loss 2.413663387298584, total_time 0.18397307395935059, batch time 0.03828167915344238, forward time 0.05021023750305176, backward time 0.09548020362854004
+[2025-04-18 14:14:28,779][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 31/97: loss 4.885745525360107, total_time 0.1795036792755127, batch time 0.036299943923950195, forward time 0.04488253593444824, backward time 0.09832000732421875
+[2025-04-18 14:14:28,785][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 47/97: loss 2.0589241981506348, total_time 0.18054866790771484, batch time 0.037776947021484375, forward time 0.0496065616607666, backward time 0.09316396713256836
+[2025-04-18 14:14:28,961][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 32/97: loss 3.8555023670196533, total_time 0.18168997764587402, batch time 0.03602886199951172, forward time 0.04736042022705078, backward time 0.09829998016357422
+[2025-04-18 14:14:28,965][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 48/97: loss 2.0387396812438965, total_time 0.17964768409729004, batch time 0.0355525016784668, forward time 0.04846763610839844, backward time 0.0956268310546875
+[2025-04-18 14:14:29,141][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 33/97: loss 2.581700563430786, total_time 0.17934823036193848, batch time 0.03594779968261719, forward time 0.04539656639099121, backward time 0.09800291061401367
+[2025-04-18 14:14:29,147][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 49/97: loss 1.7166519165039062, total_time 0.1803743839263916, batch time 0.03749370574951172, forward time 0.0501408576965332, backward time 0.09273910522460938
+[2025-04-18 14:14:29,323][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 34/97: loss 1.4823551177978516, total_time 0.18159246444702148, batch time 0.03639101982116699, forward time 0.047203779220581055, backward time 0.09799599647521973
+[2025-04-18 14:14:29,327][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 50/97: loss 2.2736754417419434, total_time 0.1796574592590332, batch time 0.03607487678527832, forward time 0.048403263092041016, backward time 0.09517788887023926
+[2025-04-18 14:14:29,506][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 35/97: loss 6.359817981719971, total_time 0.18244290351867676, batch time 0.036014556884765625, forward time 0.04826760292053223, backward time 0.0981593132019043
+[2025-04-18 14:14:29,510][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 51/97: loss 2.0185821056365967, total_time 0.18257498741149902, batch time 0.03654289245605469, forward time 0.0505526065826416, backward time 0.09547853469848633
+[2025-04-18 14:14:29,686][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 36/97: loss 2.6929280757904053, total_time 0.17956829071044922, batch time 0.03638744354248047, forward time 0.044832706451416016, backward time 0.09834694862365723
+[2025-04-18 14:14:29,692][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 52/97: loss 0.964942991733551, total_time 0.18160080909729004, batch time 0.03893637657165527, forward time 0.04957294464111328, backward time 0.09309077262878418
+[2025-04-18 14:14:29,868][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 37/97: loss 2.9533536434173584, total_time 0.18143296241760254, batch time 0.03609204292297363, forward time 0.04725241661071777, backward time 0.09808754920959473
+[2025-04-18 14:14:29,872][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 53/97: loss 1.9954607486724854, total_time 0.17932367324829102, batch time 0.035767316818237305, forward time 0.04827165603637695, backward time 0.09528398513793945
+[2025-04-18 14:14:30,051][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 38/97: loss 1.7822883129119873, total_time 0.18181729316711426, batch time 0.035894155502319336, forward time 0.04786062240600586, backward time 0.09806132316589355
+[2025-04-18 14:14:30,054][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 54/97: loss 2.599259376525879, total_time 0.18179607391357422, batch time 0.03578948974609375, forward time 0.05079841613769531, backward time 0.09520745277404785
+[2025-04-18 14:14:30,233][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 39/97: loss 2.779660940170288, total_time 0.18190789222717285, batch time 0.036194562911987305, forward time 0.04761552810668945, backward time 0.09809684753417969
+[2025-04-18 14:14:30,237][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 55/97: loss 2.6903793811798096, total_time 0.1819748878479004, batch time 0.03598833084106445, forward time 0.050727128982543945, backward time 0.09525823593139648
+[2025-04-18 14:14:30,415][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 40/97: loss 2.3254079818725586, total_time 0.18157672882080078, batch time 0.03601717948913574, forward time 0.04724478721618652, backward time 0.0983133316040039
+[2025-04-18 14:14:30,419][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 56/97: loss 3.5587260723114014, total_time 0.18107390403747559, batch time 0.03774118423461914, forward time 0.04775428771972656, backward time 0.09557747840881348
+[2025-04-18 14:14:30,594][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 41/97: loss 2.7116692066192627, total_time 0.1785109043121338, batch time 0.03573727607727051, forward time 0.04453277587890625, backward time 0.09823966026306152
+[2025-04-18 14:14:30,600][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 57/97: loss 1.4913090467453003, total_time 0.18056273460388184, batch time 0.038919925689697266, forward time 0.048684120178222656, backward time 0.0929570198059082
+[2025-04-18 14:14:30,768][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 42/97: loss 4.045757293701172, total_time 0.17379045486450195, batch time 0.03594803810119629, forward time 0.0398862361907959, backward time 0.09795546531677246
+[2025-04-18 14:14:30,778][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 58/97: loss 2.8007240295410156, total_time 0.17793035507202148, batch time 0.04022383689880371, forward time 0.04999518394470215, backward time 0.08771038055419922
+[2025-04-18 14:14:30,949][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 43/97: loss 2.262822151184082, total_time 0.17984914779663086, batch time 0.03859257698059082, forward time 0.043056488037109375, backward time 0.09819889068603516
+[2025-04-18 14:14:30,956][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 59/97: loss 2.421505928039551, total_time 0.17676043510437012, batch time 0.03727245330810547, forward time 0.04900169372558594, backward time 0.0904853343963623
+[2025-04-18 14:14:31,128][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 44/97: loss 2.4856021404266357, total_time 0.17911767959594727, batch time 0.03638291358947754, forward time 0.04456210136413574, backward time 0.09817147254943848
+[2025-04-18 14:14:31,134][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 60/97: loss 2.9285120964050293, total_time 0.17714262008666992, batch time 0.03578829765319824, forward time 0.04842042922973633, backward time 0.09293317794799805
+[2025-04-18 14:14:31,311][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 45/97: loss 1.6237291097640991, total_time 0.1822187900543213, batch time 0.03598213195800781, forward time 0.04788994789123535, backward time 0.09834575653076172
+[2025-04-18 14:14:31,315][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 61/97: loss 1.9074513912200928, total_time 0.1803126335144043, batch time 0.0356755256652832, forward time 0.04887962341308594, backward time 0.09575676918029785
+[2025-04-18 14:14:31,495][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 46/97: loss 2.775392770767212, total_time 0.18359088897705078, batch time 0.035788536071777344, forward time 0.04991888999938965, backward time 0.09788274765014648
+[2025-04-18 14:14:31,497][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 62/97: loss 2.9396328926086426, total_time 0.18130898475646973, batch time 0.03606390953063965, forward time 0.04773402214050293, backward time 0.09750986099243164
+[2025-04-18 14:14:31,680][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 47/97: loss 3.795616626739502, total_time 0.18391966819763184, batch time 0.03607916831970215, forward time 0.04976487159729004, backward time 0.09807467460632324
+[2025-04-18 14:14:31,681][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 63/97: loss 2.394909143447876, total_time 0.18407344818115234, batch time 0.036232709884643555, forward time 0.04995894432067871, backward time 0.09788060188293457
+[2025-04-18 14:14:31,862][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 48/97: loss 2.1074841022491455, total_time 0.18224096298217773, batch time 0.03625845909118652, forward time 0.047820091247558594, backward time 0.09816145896911621
+[2025-04-18 14:14:31,866][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 64/97: loss 2.683462142944336, total_time 0.1843278408050537, batch time 0.0381627082824707, forward time 0.05058145523071289, backward time 0.09558248519897461
+[2025-04-18 14:14:32,047][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 49/97: loss 1.781630277633667, total_time 0.18461990356445312, batch time 0.03622317314147949, forward time 0.05013632774353027, backward time 0.09825944900512695
+[2025-04-18 14:14:32,049][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 65/97: loss 1.6132159233093262, total_time 0.1824805736541748, batch time 0.03564262390136719, forward time 0.04883003234863281, backward time 0.0980069637298584
+[2025-04-18 14:14:32,231][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 50/97: loss 2.5919275283813477, total_time 0.18294525146484375, batch time 0.03661513328552246, forward time 0.048233985900878906, backward time 0.09809517860412598
+[2025-04-18 14:14:32,235][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 66/97: loss 2.1943588256835938, total_time 0.18523406982421875, batch time 0.038973093032836914, forward time 0.05080389976501465, backward time 0.09545636177062988
+[2025-04-18 14:14:32,413][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 51/97: loss 2.3824644088745117, total_time 0.18149518966674805, batch time 0.0358583927154541, forward time 0.04730105400085449, backward time 0.09833455085754395
+[2025-04-18 14:14:32,416][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 67/97: loss 2.2987613677978516, total_time 0.18132925033569336, batch time 0.03596901893615723, forward time 0.0498499870300293, backward time 0.09550952911376953
+[2025-04-18 14:14:32,597][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 52/97: loss 2.9791760444641113, total_time 0.18366408348083496, batch time 0.03600263595581055, forward time 0.049399375915527344, backward time 0.09826087951660156
+[2025-04-18 14:14:32,599][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 68/97: loss 2.653289794921875, total_time 0.1816849708557129, batch time 0.03603506088256836, forward time 0.04767298698425293, backward time 0.09797525405883789
+[2025-04-18 14:14:32,781][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 53/97: loss 3.0103182792663574, total_time 0.18317317962646484, batch time 0.03629112243652344, forward time 0.048921823501586914, backward time 0.09795880317687988
+[2025-04-18 14:14:32,782][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 69/97: loss 2.308110237121582, total_time 0.18316078186035156, batch time 0.035988569259643555, forward time 0.04952096939086914, backward time 0.09764981269836426
+[2025-04-18 14:14:32,966][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 54/97: loss 2.381314516067505, total_time 0.18428635597229004, batch time 0.0369868278503418, forward time 0.04928398132324219, backward time 0.09801459312438965
+[2025-04-18 14:14:32,967][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 70/97: loss 2.0049822330474854, total_time 0.1843249797821045, batch time 0.035784006118774414, forward time 0.050795793533325195, backward time 0.09774446487426758
+[2025-04-18 14:14:33,154][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 71/97: loss 2.6133804321289062, total_time 0.18593549728393555, batch time 0.0377650260925293, forward time 0.04959511756896973, backward time 0.09857463836669922
+[2025-04-18 14:14:33,155][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 55/97: loss 1.9749126434326172, total_time 0.18888282775878906, batch time 0.040918588638305664, forward time 0.04979252815246582, backward time 0.09817099571228027
+[2025-04-18 14:14:33,338][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 72/97: loss 1.8446751832962036, total_time 0.18352103233337402, batch time 0.03633308410644531, forward time 0.04885053634643555, backward time 0.09833669662475586
+[2025-04-18 14:14:33,339][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 56/97: loss 3.170842170715332, total_time 0.18368983268737793, batch time 0.036431074142456055, forward time 0.049164533615112305, backward time 0.09809303283691406
+[2025-04-18 14:14:33,523][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 73/97: loss 1.7828246355056763, total_time 0.18485379219055176, batch time 0.03660774230957031, forward time 0.04988670349121094, backward time 0.0983574390411377
+[2025-04-18 14:14:33,524][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 57/97: loss 2.51798677444458, total_time 0.18469476699829102, batch time 0.03598427772521973, forward time 0.050771236419677734, backward time 0.09793782234191895
+[2025-04-18 14:14:33,708][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 74/97: loss 3.2630257606506348, total_time 0.18484759330749512, batch time 0.03653144836425781, forward time 0.049851179122924805, backward time 0.09846353530883789
+[2025-04-18 14:14:33,710][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 58/97: loss 1.9662638902664185, total_time 0.1849524974822998, batch time 0.03666830062866211, forward time 0.05022001266479492, backward time 0.09806323051452637
+[2025-04-18 14:14:33,892][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 75/97: loss 1.8240277767181396, total_time 0.18322515487670898, batch time 0.03554534912109375, forward time 0.049497365951538086, backward time 0.09818124771118164
+[2025-04-18 14:14:33,893][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 59/97: loss 1.1363492012023926, total_time 0.18312811851501465, batch time 0.03657197952270508, forward time 0.048796892166137695, backward time 0.09775805473327637
+[2025-04-18 14:14:34,077][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 76/97: loss 3.5534567832946777, total_time 0.18400073051452637, batch time 0.035387516021728516, forward time 0.050262451171875, backward time 0.09834980964660645
+[2025-04-18 14:14:34,078][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 60/97: loss 1.471068263053894, total_time 0.18404316902160645, batch time 0.03754401206970215, forward time 0.04859352111816406, backward time 0.09790444374084473
+[2025-04-18 14:14:34,260][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 77/97: loss 2.068970203399658, total_time 0.18337726593017578, batch time 0.035971641540527344, forward time 0.04895353317260742, backward time 0.09845113754272461
+[2025-04-18 14:14:34,262][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 61/97: loss 2.646834373474121, total_time 0.18330168724060059, batch time 0.03592848777770996, forward time 0.04938173294067383, backward time 0.09799051284790039
+[2025-04-18 14:14:34,445][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 78/97: loss 2.488147258758545, total_time 0.18383550643920898, batch time 0.03628659248352051, forward time 0.04912257194519043, backward time 0.09842514991760254
+[2025-04-18 14:14:34,446][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 62/97: loss 1.8056670427322388, total_time 0.18388700485229492, batch time 0.03606677055358887, forward time 0.049820899963378906, backward time 0.09799790382385254
+[2025-04-18 14:14:34,630][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 63/97: loss 2.064249038696289, total_time 0.18359112739562988, batch time 0.03621387481689453, forward time 0.049093008041381836, backward time 0.09828329086303711
+[2025-04-18 14:14:34,632][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 79/97: loss 2.3180932998657227, total_time 0.1860218048095703, batch time 0.03741049766540527, forward time 0.050646066665649414, backward time 0.09796404838562012
+[2025-04-18 14:14:34,815][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 64/97: loss 1.8878605365753174, total_time 0.18443083763122559, batch time 0.03614640235900879, forward time 0.0500645637512207, backward time 0.09821891784667969
+[2025-04-18 14:14:34,817][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 80/97: loss 4.499268531799316, total_time 0.18449664115905762, batch time 0.03562784194946289, forward time 0.050858497619628906, backward time 0.09800910949707031
+[2025-04-18 14:14:34,997][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 65/97: loss 1.4495437145233154, total_time 0.18158388137817383, batch time 0.03593111038208008, forward time 0.047243356704711914, backward time 0.09840869903564453
+[2025-04-18 14:14:35,001][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 81/97: loss 2.2755205631256104, total_time 0.18296408653259277, batch time 0.038229942321777344, forward time 0.048989057540893555, backward time 0.09574413299560547
+[2025-04-18 14:14:35,179][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 66/97: loss 2.2845335006713867, total_time 0.18150758743286133, batch time 0.03574395179748535, forward time 0.04742622375488281, backward time 0.09833621978759766
+[2025-04-18 14:14:35,183][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 82/97: loss 2.305654525756836, total_time 0.1814131736755371, batch time 0.036147117614746094, forward time 0.04975128173828125, backward time 0.09551405906677246
+[2025-04-18 14:14:35,364][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 67/97: loss 3.2039008140563965, total_time 0.1838054656982422, batch time 0.036031484603881836, forward time 0.04961347579956055, backward time 0.0981595516204834
+[2025-04-18 14:14:35,365][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 83/97: loss 2.375842571258545, total_time 0.18177080154418945, batch time 0.036112070083618164, forward time 0.04778313636779785, backward time 0.09787392616271973
+[2025-04-18 14:14:35,547][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 68/97: loss 2.0297963619232178, total_time 0.18334674835205078, batch time 0.03606724739074707, forward time 0.04905343055725098, backward time 0.09822511672973633
+[2025-04-18 14:14:35,549][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 84/97: loss 2.143825054168701, total_time 0.18329119682312012, batch time 0.03602147102355957, forward time 0.049463748931884766, backward time 0.09780478477478027
+[2025-04-18 14:14:35,730][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 69/97: loss 1.8552806377410889, total_time 0.18213510513305664, batch time 0.03633689880371094, forward time 0.04756045341491699, backward time 0.0982363224029541
+[2025-04-18 14:14:35,734][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 85/97: loss 2.1568100452423096, total_time 0.18421101570129395, batch time 0.038303375244140625, forward time 0.05049943923950195, backward time 0.09540724754333496
+[2025-04-18 14:14:35,915][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 70/97: loss 2.543930768966675, total_time 0.1846301555633545, batch time 0.03705930709838867, forward time 0.049706220626831055, backward time 0.09786343574523926
+[2025-04-18 14:14:35,917][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 86/97: loss 2.579331398010254, total_time 0.18269109725952148, batch time 0.03634166717529297, forward time 0.04865217208862305, backward time 0.09769630432128906
+[2025-04-18 14:14:36,099][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 71/97: loss 2.89485502243042, total_time 0.18350529670715332, batch time 0.0363006591796875, forward time 0.049101829528808594, backward time 0.09810209274291992
+[2025-04-18 14:14:36,101][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 87/97: loss 1.71036696434021, total_time 0.1836235523223877, batch time 0.03586769104003906, forward time 0.049765586853027344, backward time 0.09798908233642578
+[2025-04-18 14:14:36,283][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 72/97: loss 1.5584595203399658, total_time 0.18351244926452637, batch time 0.03577399253845215, forward time 0.04953503608703613, backward time 0.09820270538330078
+[2025-04-18 14:14:36,285][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 88/97: loss 2.264162063598633, total_time 0.18332695960998535, batch time 0.036286115646362305, forward time 0.04913163185119629, backward time 0.09790802001953125
+[2025-04-18 14:14:36,466][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 73/97: loss 1.7228221893310547, total_time 0.1820995807647705, batch time 0.036035776138305664, forward time 0.0478062629699707, backward time 0.09825563430786133
+[2025-04-18 14:14:36,469][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 89/97: loss 2.6817684173583984, total_time 0.18424201011657715, batch time 0.03890395164489746, forward time 0.04974174499511719, backward time 0.0955953598022461
+[2025-04-18 14:14:36,648][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 74/97: loss 2.811927318572998, total_time 0.1817173957824707, batch time 0.03622722625732422, forward time 0.04720163345336914, backward time 0.09828734397888184
+[2025-04-18 14:14:36,651][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 90/97: loss 2.4636504650115967, total_time 0.18146181106567383, batch time 0.03728461265563965, forward time 0.0488131046295166, backward time 0.09536290168762207
+[2025-04-18 14:14:36,832][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 75/97: loss 4.594954013824463, total_time 0.18396377563476562, batch time 0.03617405891418457, forward time 0.04957938194274902, backward time 0.09820938110351562
+[2025-04-18 14:14:36,834][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 91/97: loss 1.9112091064453125, total_time 0.18198227882385254, batch time 0.03560590744018555, forward time 0.04852008819580078, backward time 0.0978555679321289
+[2025-04-18 14:14:37,016][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 76/97: loss 2.4548087120056152, total_time 0.18319177627563477, batch time 0.03600573539733887, forward time 0.04895138740539551, backward time 0.09823393821716309
+[2025-04-18 14:14:37,018][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 92/97: loss 1.299143671989441, total_time 0.18324518203735352, batch time 0.03610873222351074, forward time 0.04917740821838379, backward time 0.09795808792114258
+[2025-04-18 14:14:37,200][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 77/97: loss 1.5919997692108154, total_time 0.183241605758667, batch time 0.03609156608581543, forward time 0.049114227294921875, backward time 0.09803462028503418
+[2025-04-18 14:14:37,201][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 93/97: loss 1.8174887895584106, total_time 0.18323493003845215, batch time 0.03621315956115723, forward time 0.04937458038330078, backward time 0.09764647483825684
+[2025-04-18 14:14:37,384][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 78/97: loss 1.8349692821502686, total_time 0.1831660270690918, batch time 0.03581547737121582, forward time 0.04911518096923828, backward time 0.09823369979858398
+[2025-04-18 14:14:37,385][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 94/97: loss 2.690089702606201, total_time 0.18333673477172852, batch time 0.036200523376464844, forward time 0.04910111427307129, backward time 0.09803366661071777
+[2025-04-18 14:14:37,568][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 79/97: loss 1.7876710891723633, total_time 0.18348312377929688, batch time 0.03644561767578125, forward time 0.048963069915771484, backward time 0.09807348251342773
+[2025-04-18 14:14:37,569][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 95/97: loss 2.5400166511535645, total_time 0.18333005905151367, batch time 0.036023616790771484, forward time 0.04953360557556152, backward time 0.09777188301086426
+[2025-04-18 14:14:37,752][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 80/97: loss 1.7610573768615723, total_time 0.18366408348083496, batch time 0.03658866882324219, forward time 0.04923200607299805, backward time 0.09784245491027832
+[2025-04-18 14:14:37,753][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 96/97: loss 2.502256393432617, total_time 0.18381953239440918, batch time 0.03618431091308594, forward time 0.04996633529663086, backward time 0.09766793251037598
+[2025-04-18 14:14:37,934][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 81/97: loss 2.281554698944092, total_time 0.18191027641296387, batch time 0.03615307807922363, forward time 0.04758095741271973, backward time 0.0981752872467041
+[2025-04-18 14:14:37,938][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 97/97: loss 2.298325538635254, total_time 0.18390798568725586, batch time 0.037935733795166016, forward time 0.05054116249084473, backward time 0.09543013572692871
+[2025-04-18 14:14:37,939][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: avg training loss 3.1156199771104407
+[2025-04-18 14:14:37,985][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: starting validation
+[2025-04-18 14:14:38,041][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 82/97: loss 1.804452896118164, total_time 0.10678219795227051, batch time 0.036139488220214844, forward time 0.024913311004638672, backward time 0.04572868347167969
+[2025-04-18 14:14:38,162][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 83/97: loss 3.3896846771240234, total_time 0.11969375610351562, batch time 0.03621411323547363, forward time 0.03146839141845703, backward time 0.052010297775268555
+[2025-04-18 14:14:38,279][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 84/97: loss 1.6238871812820435, total_time 0.11725187301635742, batch time 0.03655862808227539, forward time 0.027688264846801758, backward time 0.05300450325012207
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([])
+[2025-04-18 14:14:38,386][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 85/97: loss 2.759171724319458, total_time 0.10656952857971191, batch time 0.03594017028808594, forward time 0.02492547035217285, backward time 0.04570293426513672
+[2025-04-18 14:14:38,496][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 86/97: loss 4.225987434387207, total_time 0.10884380340576172, batch time 0.03829455375671387, forward time 0.024840116500854492, backward time 0.04570817947387695
+[2025-04-18 14:14:38,603][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 87/97: loss 2.579700469970703, total_time 0.10727119445800781, batch time 0.03609514236450195, forward time 0.025421857833862305, backward time 0.04575371742248535
+[2025-04-18 14:14:38,711][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 88/97: loss 2.5653574466705322, total_time 0.10712504386901855, batch time 0.03642582893371582, forward time 0.024955272674560547, backward time 0.045743465423583984
+[2025-04-18 14:14:38,818][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 89/97: loss 2.530728340148926, total_time 0.10644769668579102, batch time 0.035901784896850586, forward time 0.02489924430847168, backward time 0.04564547538757324
+[2025-04-18 14:14:38,925][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 90/97: loss 2.607301950454712, total_time 0.10700368881225586, batch time 0.0362856388092041, forward time 0.024994850158691406, backward time 0.04572248458862305
+[2025-04-18 14:14:39,032][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 91/97: loss 1.69435715675354, total_time 0.10669112205505371, batch time 0.03614163398742676, forward time 0.024922847747802734, backward time 0.045626163482666016
+[2025-04-18 14:14:39,139][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 92/97: loss 1.5510261058807373, total_time 0.10623359680175781, batch time 0.03574013710021973, forward time 0.024869918823242188, backward time 0.04562234878540039
+[2025-04-18 14:14:39,246][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 93/97: loss 2.8049182891845703, total_time 0.10651755332946777, batch time 0.035919189453125, forward time 0.024927616119384766, backward time 0.0456695556640625
+[2025-04-18 14:14:39,354][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 94/97: loss 1.4691851139068604, total_time 0.10688948631286621, batch time 0.03636574745178223, forward time 0.024880647659301758, backward time 0.04564261436462402
+[2025-04-18 14:14:39,461][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 95/97: loss 1.7760030031204224, total_time 0.10694193840026855, batch time 0.03627514839172363, forward time 0.024929046630859375, backward time 0.045737504959106445
+[2025-04-18 14:14:39,569][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 96/97: loss 2.313183307647705, total_time 0.10715103149414062, batch time 0.035916805267333984, forward time 0.025613784790039062, backward time 0.04561948776245117
+[2025-04-18 14:14:39,676][the_well.benchmark.trainer.training][INFO] - Epoch 1, Batch 97/97: loss 1.3258823156356812, total_time 0.10696816444396973, batch time 0.036367177963256836, forward time 0.02489495277404785, backward time 0.045705318450927734
+[2025-04-18 14:14:39,677][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: avg training loss 3.10900578793791
+[2025-04-18 14:14:39,717][the_well.benchmark.trainer.training][INFO] - Epoch 1/4: starting validation
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([1, 384])
+LOSS SHAPE DEBUG: torch.Size([])
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mturbulent_radiative_layer_2D-sinenet-SineNet-0.0002[0m at: [34mhttps://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/e9hrlmbv[0m
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mturbulent_radiative_layer_2D-sinenet-SineNet-0.0002[0m at: [34mhttps://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_sinenet_test/runs/e9hrlmbv[0m
+
+JOB STATISTICS
+==============
+Job ID: 11261791
+Cluster: snellius
+User/Group: kschmidt/kschmidt
+State: FAILED (exit code 143)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:01:52
+CPU Efficiency: 19.44% of 00:09:36 core-walltime
+Job Wall-clock time: 00:00:36
+Memory Utilized: 1.19 GB
+Memory Efficiency: 0.66% of 180.00 GB (180.00 GB/node)
+The task which had the largest memory consumption differs by 199.80% from the average task max memory consumption

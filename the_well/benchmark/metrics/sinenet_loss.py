@@ -27,17 +27,18 @@ def scaledlp_loss(input: torch.Tensor, target: torch.Tensor, p: int = 2, reducti
         raise NotImplementedError(reduction)
 
 
+# AANGEPAST
 def custommse_loss(input: torch.Tensor, target: torch.Tensor, reduction: str = "mean"):
     loss = F.mse_loss(input, target, reduction="none")
     # avg across space
     reduced_loss = torch.mean(loss, dim=(3, 4))
     # sum across time + fields
-    reduced_loss = reduced_loss.sum(dim=(1, 2))
+    #reduced_loss = reduced_loss.sum(dim=(1, 2))
     # reduce along batch
     if reduction == "mean":
-        return torch.mean(reduced_loss)
+        return reduced_loss.sum(dim=(1, 2)) #torch.mean(reduced_loss)
     elif reduction == "sum":
-        return torch.sum(reduced_loss)
+        return reduced_loss.sum(dim=(1, 2)) #torch.sum(reduced_loss)
     elif reduction == "none":
         return reduced_loss
     else:

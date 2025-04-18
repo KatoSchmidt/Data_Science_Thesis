@@ -44,6 +44,12 @@ class SineNetFormatter(AbstractDataFormatter):
     def process_output_channel_last(self, output: torch.Tensor) -> torch.Tensor:
         return output # terug naar original format
 
+    def process_output_after_denomalize(self, output: torch.Tensor) -> torch.Tensor:
+        return rearrange(output, "b t h w c -> b t c h w") # terug naar original format
+
+    def process_output_denormalize(self, output: torch.Tensor) -> torch.Tensor:
+        return rearrange(output, "b t c h w -> b t h w c")
+
     def process_output_expand_time(self, output: torch.Tensor) -> torch.Tensor:
         return output  # tijdsdimensie is al aanwezig
 
