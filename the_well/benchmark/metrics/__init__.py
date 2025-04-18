@@ -6,6 +6,7 @@ from .plottable_data import (
 )
 from .spatial import MAE, MSE, NMSE, NRMSE, RMSE, VMSE, VRMSE, LInfinity, PearsonR
 from .spectral import binned_spectral_mse
+from .sinenet_loss import ScaledLpLoss, CustomMSELoss
 
 __all__ = [
     "MAE",
@@ -18,6 +19,8 @@ __all__ = [
     "VRMSE",
     "binned_spectral_mse",
     "PearsonR",
+    "ScaledLpLoss", 
+    "CustomMSELoss"
 ]
 
 long_time_metrics = ["VRMSE", "RMSE", "binned_spectral_mse", "PearsonR"]

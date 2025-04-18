@@ -22,6 +22,31 @@ class AbstractDataFormatter(ABC):
     @abstractmethod
     def process_output_expand_time(self, output: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
+    
+
+class SineNetFormatter(AbstractDataFormatter):
+    """
+    Formatter voor het SineNet-model.
+
+    Houdt tijd als aparte dimensie en gebruikt channels-first formaat:
+    (B, T, H, W, C) → (B, T, C, H, W)
+    """
+
+    def process_input(self, data: Dict) -> Tuple:
+        x = data["input_fields"]  # (B, Ti, H, W, C)
+        x = rearrange(x, "b t h w c -> b t c h w")  # (B, Ti, C, H, W)
+
+        y = data["output_fields"]  # (B, To, H, W, C)
+        y = rearrange(y, "b t h w c -> b t c h w")  # (B, To, C, H, W)
+
+        return (torch.nan_to_num(x),), torch.nan_to_num(y)
+
+    def process_output_channel_last(self, output: torch.Tensor) -> torch.Tensor:
+        return output # terug naar original format
+
+    def process_output_expand_time(self, output: torch.Tensor) -> torch.Tensor:
+        return output  # tijdsdimensie is al aanwezig
+
 
 
 class DefaultChannelsFirstFormatter(AbstractDataFormatter):

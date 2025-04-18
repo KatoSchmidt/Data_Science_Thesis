@@ -10,6 +10,7 @@ import tqdm
 import wandb
 from torch.utils.data import DataLoader
 
+from the_well.benchmark.metrics import CustomMSELoss, ScaledLpLoss
 from the_well.benchmark.metrics import (
     long_time_metrics,
     make_video,
@@ -20,6 +21,7 @@ from the_well.benchmark.metrics import (
 from the_well.data.data_formatter import (
     DefaultChannelsFirstFormatter,
     DefaultChannelsLastFormatter,
+    SineNetFormatter
 )
 from the_well.data.datamodule import AbstractDataModule
 from the_well.data.datasets import DeltaWellDataset
@@ -133,7 +135,7 @@ class Trainer:
         self.num_time_intervals = num_time_intervals
         self.enable_amp = enable_amp
         self.amp_type = torch.bfloat16 if amp_type == "bfloat16" else torch.float16
-        self.grad_scaler = torch.GradScaler(
+        self.grad_scaler = torch.cuda.amp.GradScaler(
             self.device.type, enabled=enable_amp and amp_type != "bfloat16"
         )
         self.is_distributed = is_distributed
@@ -146,6 +148,9 @@ class Trainer:
             self.formatter = DefaultChannelsFirstFormatter(self.dset_metadata)
         elif formatter == "channels_last_default":
             self.formatter = DefaultChannelsLastFormatter(self.dset_metadata)
+        elif formatter == "sinenet_formatter":
+            self.formatter = SineNetFormatter(self.dset_metadata)
+
         if len(checkpoint_path) > 0:
             self.load_checkpoint(checkpoint_path)
 
@@ -235,8 +240,11 @@ class Trainer:
             y_pred = formatter.process_output_channel_last(y_pred)
 
             if not train:
-                moving_batch, y_pred = self.denormalize(moving_batch, y_pred)
-
+                ### AANPASSING
+                if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
+                    y_pred = self.dset_norm.denormalize_flattened(y_pred, "variable")  # of .inverse() als dat beschikbaar is
+                else:
+                    moving_batch, y_pred = self.denormalize(moving_batch, y_pred)
             if (not train) and self.is_delta:
                 assert {
                     moving_batch["input_fields"][:, -1, ...].shape == y_pred.shape

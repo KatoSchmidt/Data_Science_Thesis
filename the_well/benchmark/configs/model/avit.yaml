@@ -1,3 +1,0 @@
-_target_: the_well.benchmark.models.AViT
-hidden_dim: 384
-num_heads: 6

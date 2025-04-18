@@ -1,1 +1,0 @@
-../../datasets/helmholtz_staircase/README.md

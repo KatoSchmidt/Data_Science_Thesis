@@ -1,1 +1,0 @@
-../../datasets/supernova_explosion_64/README.md
