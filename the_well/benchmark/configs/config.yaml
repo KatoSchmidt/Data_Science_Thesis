@@ -32,9 +32,16 @@ data:
     _partial_: true
     _target_: the_well.data.datasets.WellDataset
 
+# trainer:
+#   loss_fn:
+#     _target_: the_well.benchmark.metrics.CustomMSELoss
+#   formatter: sinenet_formatter
+
 trainer:
   loss_fn:
-    _target_: the_well.benchmark.metrics.CustomMSELoss
+    _target_: the_well.benchmark.metrics.ScaledLpLoss
+    p: 2
+    reduction: none
   formatter: sinenet_formatter
 
 _target_: the_well.benchmark.models.sinenet.SineNet

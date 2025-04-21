@@ -4,17 +4,17 @@ defaults:
   - /model: sinenet
   - /lr_scheduler: cosine_with_warmup
 
-trainer:
-  loss_fn:
-    _target_: the_well.benchmark.metrics.CustomMSELoss
-  formatter: sinenet_formatter
+# trainer:
+#   loss_fn:
+#     _target_: the_well.benchmark.metrics.CustomMSELoss
+#   formatter: sinenet_formatter
 
 # trainer:
-  # loss_fn:
-  #   _target_: the_well.benchmark.models.sinenet.loss.ScaledLpLoss
-  #   p: 2
-  #   reduction: mean
-  # formatter: sinenet_formatter
+#   loss_fn:
+#     _target_: the_well.benchmark.models.sinenet.loss.ScaledLpLoss
+#     p: 2
+#     reduction: none
+#   formatter: sinenet_formatter
 
 
 name: sinenet

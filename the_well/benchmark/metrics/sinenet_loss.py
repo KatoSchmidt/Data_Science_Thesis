@@ -3,17 +3,40 @@ import torch.nn.functional as F
 from the_well.benchmark.metrics.common import Metric
 
 class CustomMSELoss(Metric):
-    def __init__(self):
+    def __init__(self, reduction: str = "none"):
         super().__init__()
-        self.loss_fn = CustomMSE()
+        self.reduction = reduction
+
+    def forward(self, x: torch.Tensor, y: torch.Tensor, meta=None):
+        return custommse_loss(x, y, reduction=self.reduction)
 
     def eval(self, x: torch.Tensor, y: torch.Tensor, meta=None):
-        return self.loss_fn(x, y)
+        return self.forward(x, y, meta)
+    
+class ScaledLpLoss(Metric):
+    def __init__(self, p=2, reduction="none"):
+        super().__init__()
+        self.p = p
+        self.reduction = reduction
 
-def scaledlp_loss(input: torch.Tensor, target: torch.Tensor, p: int = 2, reduction: str = "mean"):
-    assert input.dim() == 5 and target.dim() == 5 # B, T, C, S, S
-    input = input.flatten(3)
+    def forward(self, x: torch.Tensor, y: torch.Tensor, meta=None):
+        return scaledlp_loss(x, y, p=self.p, reduction=self.reduction)
+
+    def eval(self, x: torch.Tensor, y: torch.Tensor, meta=None):
+        return self.forward(x, y, meta)
+
+def scaledlp_loss(input: torch.Tensor, target: torch.Tensor, p: int = 2, reduction: str = "none"):
+    assert input.dim() == 5 and target.dim() == 5 
+
+    # AANPASSING
+    # Zet naar [B, T, C, W, H] 
+    input = input.permute(0, 1, 4, 2, 3)   # [B, T, C, H, W]
+    target = target.permute(0, 1, 4, 2, 3) # [B, T, C, H, W]
+
+    # Flatten spatial dims
+    input = input.flatten(3)   # [B, T, C, H*W]
     target = target.flatten(3)
+
     diff_norms = torch.norm(input - target, p, dim=-1)
     target_norms = torch.norm(target, p, dim=-1)
     val = diff_norms / target_norms
@@ -51,7 +74,7 @@ def custommse_loss(input: torch.Tensor, target: torch.Tensor, reduction: str = "
     else:
         raise NotImplementedError(reduction)
 
-class ScaledLpLoss(torch.nn.Module):
+class ScaledLp(torch.nn.Module):
     """Scaled Lp loss for PDEs.
 
     Args:
@@ -59,7 +82,7 @@ class ScaledLpLoss(torch.nn.Module):
         reduction (str, optional): Reduction method. Defaults to "mean".
     """
 
-    def __init__(self, p: int = 2, reduction: str = "mean") -> None:
+    def __init__(self, p: int = 2, reduction: str = "none") -> None:
         super().__init__()
         self.p = p
         self.reduction = reduction
