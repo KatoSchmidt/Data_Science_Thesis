@@ -244,7 +244,7 @@ class Trainer:
                 if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
                     y_pred = self.formatter.process_output_denormalize(y_pred)
                     y_pred = self.dset_norm.denormalize_flattened(y_pred, "variable")  # of .inverse() als dat beschikbaar is
-                    y_pred = self.formatter.process_output_after_denomalize(y_pred)
+                    #y_pred = self.formatter.process_output_after_denomalize(y_pred)
                 else:
                     moving_batch, y_pred = self.denormalize(moving_batch, y_pred)
             if (not train) and self.is_delta:
@@ -264,6 +264,12 @@ class Trainer:
             y_preds.append(y_pred)
         y_pred_out = torch.cat(y_preds, dim=1)
         y_ref = y_ref.to(self.device)
+
+        # AANGEPAST
+        if not train:
+            if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
+                y_ref = self.formatter.process_output_denormalize(y_ref)
+                
         return y_pred_out, y_ref
 
     def temporal_split_losses(
@@ -287,7 +293,11 @@ class Trainer:
     def split_up_losses(self, loss_values, loss_name, dset_name, field_names):
         new_losses = {}
         time_logs = {}
-        print("LOSS SHAPE DEBUG:", loss_values.shape)
+        # print("LOSS SHAPE DEBUG: ", loss_values.shape)
+        # print("LOSS NAME DEBUG: ", loss_name)
+        # print("DSET_NAME: ", dset_name)
+        # print("FIELD NAMES: ", field_names)
+
         time_steps = loss_values.shape[0]  # we already average over batch
         num_time_intervals = min(time_steps, self.num_time_intervals)
         temporal_loss_intervals = np.linspace(0, np.log(time_steps), num_time_intervals)
@@ -340,15 +350,20 @@ class Trainer:
                 # Go through losses
                 for loss_fn in self.validation_suite:
                     # Mean over batch and time per field
+                    # print(" y_pred, y_ref,: ", y_pred.shape, y_ref.shape)
                     loss = loss_fn(y_pred, y_ref, self.dset_metadata)
-
+                
                     # Some losses return multiple values for efficiency
                     if not isinstance(loss, dict):
                         loss = {loss_fn.__class__.__name__: loss}
                         
                     # Split the losses and update the logging dictionary
+                    
+                    # print("LOSS items: ", loss.items())
                     for k, v in loss.items():
+                        # print("v.shape: ", v.shape)
                         sub_loss = v.mean(0)
+                        # print("SUB_LOSS: ", sub_loss.shape)
 
                         new_losses, new_time_logs = self.split_up_losses(
                             sub_loss, k, dset_name, field_names
@@ -401,10 +416,15 @@ class Trainer:
                 batch_time = time.time() - batch_start
                 y_pred, y_ref = self.rollout_model(self.model, batch, self.formatter)
                 forward_time = time.time() - batch_start - batch_time
+                #print("PREDICTIONS SHAPE: ",y_ref.shape, y_pred.shape)
                 assert y_ref.shape == y_pred.shape, (
                     f"Mismatching shapes between reference {y_ref.shape} and prediction {y_pred.shape}"
                 )
+                if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
+                    y_pred = self.formatter.process_output_denormalize(y_pred)
+                    y_ref = self.formatter.process_output_denormalize(y_ref)
                 loss = self.loss_fn(y_pred, y_ref, self.dset_metadata).mean()
+                
             self.grad_scaler.scale(loss).backward()
             self.grad_scaler.step(self.optimizer)
             self.grad_scaler.update()
@@ -527,7 +547,9 @@ class Trainer:
         rollout_test_dataloader = self.datamodule.rollout_test_dataloader()
         epoch = self.max_epoch + 1
         # Regular val
+
         val_loss, val_loss_dict = self.validation_loop(val_dataloder, full=True)
+
         logger.info(f"Post-run: validation loss {val_loss}")
         val_loss_dict |= {"valid": val_loss, "epoch": self.max_epoch + 1}
         wandb.log(val_loss_dict, step=epoch)

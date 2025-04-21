@@ -6,7 +6,7 @@ defaults:
 
 trainer:
   loss_fn:
-    _target_: the_well.benchmark.metrics.MSE #.CustomMSELoss
+    _target_: the_well.benchmark.metrics.CustomMSELoss
   formatter: sinenet_formatter
 
 # trainer:

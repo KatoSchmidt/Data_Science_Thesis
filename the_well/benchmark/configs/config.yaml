@@ -22,7 +22,7 @@ optimizer:
 data:
   n_steps_input: 4
   n_steps_output: 1
-  batch_size: 8
+  batch_size: 16
   include_filters: 
      - turbulent_radiative_layer_tcool_0.03.hdf5
   normalization_type:
@@ -44,14 +44,38 @@ n_output_scalar_components: 2
 n_output_vector_components: 1
 time_history: 4
 time_future: 1
-hidden_channels: 42
+hidden_channels: 32
 padding_mode: "circular"
 activation: "gelu"
 num_layers: 4
-num_waves: 1
+num_waves: 2
 num_blocks: 1
 norm: true
-mult: 1.2
+mult: 1.2 
 
 name: sinenet
 
+
+# defaults:
+#   - _self_  
+#   - trainer: debug
+#   - optimizer: adam
+#   - experiment: unet_convnext
+#   - server: local
+#   - resume_overrides: no_overrides
+# data:
+#   n_steps_input: 4
+#   n_steps_output: 1
+#   batch_size: 32 ## DEBUG -> 64
+#   include_filters: ## DEBUG -> None
+#     - turbulent_radiative_layer_tcool_0.03.hdf5
+#   normalization_type:
+#     _partial_: true
+#     _target_: the_well.data.normalization.ZScoreNormalization
+#   train_dataset: # options: WellDataset or DeltaWellDataset
+#     _partial_: true
+#     _target_: the_well.data.datasets.WellDataset
+# # model:
+# #   gradient_checkpointing: False
+# data_workers: 0  ## DEBUG -> 14
+# wandb_project_name: "the_well_convnext"

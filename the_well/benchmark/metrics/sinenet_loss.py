@@ -28,22 +28,28 @@ def scaledlp_loss(input: torch.Tensor, target: torch.Tensor, p: int = 2, reducti
 
 
 # AANGEPAST
-def custommse_loss(input: torch.Tensor, target: torch.Tensor, reduction: str = "mean"):
+def custommse_loss(input: torch.Tensor, target: torch.Tensor, reduction: str = "none"):
     loss = F.mse_loss(input, target, reduction="none")
+    # print("LOSS: ", loss.shape)
+
+
     # avg across space
-    reduced_loss = torch.mean(loss, dim=(3, 4))
+    reduced_loss = torch.mean(loss, dim=(2, 3))
+    #reduced_loss = torch.mean(loss, dim=(3, 4))
+    # print("reduced_loss 1: ", reduced_loss.shape)
+
     # sum across time + fields
-    #reduced_loss = reduced_loss.sum(dim=(1, 2))
+    # reduced_loss = reduced_loss.sum(dim=(1, 2))
     # reduce along batch
+
     if reduction == "mean":
-        return reduced_loss.sum(dim=(1, 2)) #torch.mean(reduced_loss)
+        return torch.mean(reduced_loss)
     elif reduction == "sum":
-        return reduced_loss.sum(dim=(1, 2)) #torch.sum(reduced_loss)
+        return torch.sum(reduced_loss)
     elif reduction == "none":
         return reduced_loss
     else:
         raise NotImplementedError(reduction)
-
 
 class ScaledLpLoss(torch.nn.Module):
     """Scaled Lp loss for PDEs.
@@ -71,7 +77,7 @@ class CustomMSE(torch.nn.Module):
         reduction (str, optional): Reduction method. Defaults to "mean".
     """
 
-    def __init__(self, reduction: str = "mean") -> None:
+    def __init__(self, reduction: str = "none") -> None:
         super().__init__()
         self.reduction = reduction
 
