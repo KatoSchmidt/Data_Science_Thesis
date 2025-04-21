@@ -1,8 +1,5 @@
 defaults:
   - data: data
-  - model: unet_convnext
+  - model: sinenet #unet_convnext
 
-model_ckpt: "experiments/turbulent_radiative_layer_2D-unet_convnext-UNetConvNext-0.005/best.pt"
-data:
-  n_steps_input: 4
-  n_steps_output: 1
+model_ckpt: """
