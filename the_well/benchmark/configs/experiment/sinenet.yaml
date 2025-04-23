@@ -2,20 +2,20 @@
 defaults:
  - /model: sinenet
 
-# trainer:
-#   loss_fn:
-#     _target_: the_well.benchmark.metrics.CustomMSELoss
-#   formatter: sinenet_formatter
-
 trainer:
   loss_fn:
-    _target_: the_well.benchmark.metrics.ScaledLpLoss
-    p: 2
-    reduction: none
+    _target_: the_well.benchmark.metrics.CustomMSELoss
   formatter: sinenet_formatter
+
+# trainer:
+#   loss_fn:
+#     _target_: the_well.benchmark.metrics.ScaledLpLoss
+#     p: 2
+#     reduction: none
+#   formatter: sinenet_formatter
 
 optimizer:
   _target_: torch.optim.AdamW
   lr: 2E-4
 
-name: sinenet
+name: SineNet_4_(64-140)

@@ -1,5 +1,5 @@
 _target_: the_well.data.WellDataModule
-batch_size: 16
+batch_size: 64
 well_base_path: /home/kschmidt/the_well/datasets
 well_dataset_name: turbulent_radiative_layer_2D
 use_normalization: True

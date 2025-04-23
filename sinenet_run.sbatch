@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=sinenet_run
+#SBATCH --job-name=sinenet_full_run
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 #SBATCH --partition=gpu_h100
 #SBATCH --gpus=1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=00:45:00
+#SBATCH --cpus-per-task=32
+#SBATCH --time=16:00:00
 
 # Modules laden
 module purge

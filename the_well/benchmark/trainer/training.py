@@ -492,9 +492,11 @@ class Trainer:
                 val_loss_dict |= {"valid": val_loss, "epoch": epoch}
                 wandb.log(val_loss_dict, step=epoch)
                 if self.best_val_loss is None or val_loss < self.best_val_loss:
+                    self.best_val_loss = val_loss
                     self.save_model(
                         epoch, val_loss, os.path.join(self.checkpoint_folder, "best.pt")
                     )
+                    logger.info(f"Epoch {epoch}: new best val loss = {val_loss:.4f}")
             # Check if time for expensive validation - periodic or final
             if epoch % self.rollout_val_frequency == 0 or (epoch == self.max_epoch):
                 logger.info(

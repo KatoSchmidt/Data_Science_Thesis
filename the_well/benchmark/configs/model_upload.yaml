@@ -2,4 +2,8 @@ defaults:
   - data: data
   - model: sinenet #unet_convnext
 
-model_ckpt: """
+model_ckpt: "/home/kschmidt/the_wel_sinenet/experiments"
+
+data:
+  n_steps_input: 4
+  n_steps_output: 1
