@@ -1,8 +1,6 @@
 # @package _global_
 defaults:
-  - /data: turbulent_radiative_layer_2D
-  - /model: sinenet
-  - /lr_scheduler: cosine_with_warmup
+ - /model: sinenet
 
 trainer:
   loss_fn:
@@ -11,10 +9,13 @@ trainer:
 
 # trainer:
 #   loss_fn:
-#     _target_: the_well.benchmark.models.sinenet.loss.ScaledLpLoss
+#     _target_: the_well.benchmark.metrics.ScaledLpLoss
 #     p: 2
 #     reduction: none
 #   formatter: sinenet_formatter
 
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 2E-4
 
-name: sinenet
+name: SineNet_4_(64-140)

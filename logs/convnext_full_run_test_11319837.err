@@ -1,0 +1,71 @@
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: kato-schmidt (kato-schmidt-university-of-amsterdam) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in experiments/SineNet_8_(64-125)-SineNet-0.0002/0/wandb/run-20250422_152652-xgacvve6
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run SineNet_8_(64-125)-SineNet-0.0002
+wandb: ⭐️ View project at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_convnext
+wandb: 🚀 View run at https://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_convnext/runs/xgacvve6
+/gpfs/home4/kschmidt/the_well_sinenet/the_well/data/datamodule.py:115: DeprecationWarning: `use_normalization` parameter will be removed in a future version. For proper normalizing, set both use_normalization=True and normalization_type to either ZScoreNormalization or RMSNormalization.Default behavior is `normalization_type=ZScoreNormalization` and `use_normalization=True`.To switch off normalization instead, please set use_normalization=False in the config.yaml file
+  warnings.warn(
+/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 170, in main
+    train(
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/train.py", line 120, in train
+    trainer.train()
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 463, in train
+    train_loss, train_logs = self.train_one_epoch(epoch, train_dataloader)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 417, in train_one_epoch
+    y_pred, y_ref = self.rollout_model(self.model, batch, self.formatter)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/trainer/training.py", line 238, in rollout_model
+    y_pred = model(*inputs)
+             ^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/models/sinenet/sinenet.py", line 213, in forward
+    x = self.up[stack][i](x, xs.pop(-1))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/models/sinenet/sinenet.py", line 105, in forward
+    h = self.conv[block](h)
+        ^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well_sinenet/the_well/benchmark/models/sinenet/sinenet.py", line 24, in forward
+    h = self.activation(self.norm1(self.conv1(x)))
+                                   ^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/kschmidt/the_well/the_well_venv/lib/python3.11/site-packages/torch/nn/modules/conv.py", line 453, in _conv_forward
+    return F.conv2d(F.pad(input, self._reversed_padding_repeated_twice, mode=self.padding_mode),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 768.00 MiB. GPU 0 has a total capacty of 93.11 GiB of which 479.81 MiB is free. Including non-PyTorch memory, this process has 92.61 GiB memory in use. Of the allocated memory 90.32 GiB is allocated by PyTorch, and 1.63 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+srun: error: gcn110: task 0: Exited with exit code 1
+srun: Terminating StepId=11319837.0

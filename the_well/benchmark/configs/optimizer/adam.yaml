@@ -1,4 +1,4 @@
 _target_: torch.optim.AdamW
 lr: 5E-3
-weight_decay: 0.01 # "AdamW was used for all experiments with the PyTorch default WD of .01"
-# weight_decay: 1E-4
+weight_decay: 1E-4
+# weight_decay: 0.01 # "AdamW was used for all experiments with the PyTorch default WD of .01"

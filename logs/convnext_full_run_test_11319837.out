@@ -1,0 +1,501 @@
+[2025-04-22 15:26:52,504][the_well][INFO] - Run experiment SineNet_8_(64-125)-SineNet-0.0002
+[2025-04-22 15:26:52,506][the_well][INFO] - Configuration:
+data_workers: 14
+wandb_project_name: the_well_convnext
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 64
+  well_base_path: /home/kschmidt/the_well/datasets
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: 4
+  time_future: 1
+  hidden_channels: 64
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 8
+  norm: true
+  mult: 1.25
+trainer:
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  formatter: sinenet_formatter
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 495
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 20
+  max_rollout_steps: 100
+  num_time_intervals: 5
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  checkpoint_path: ''
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+name: SineNet_8_(64-125)
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+
+[2025-04-22 15:26:53,860][the_well][INFO] - Distributed training: False
+[2025-04-22 15:26:53,861][the_well][INFO] - Instantiate datamodule the_well.data.WellDataModule
+[2025-04-22 15:26:54,295][the_well][INFO] - Instantiate model the_well.benchmark.models.sinenet.SineNet
+circular
+# par: 18292332, M=1.25
+Channels: 64->80->100->125->156
+===========================================================================
+Layer (type:depth-idx)                             Param #
+===========================================================================
+SineNet                                            --
+├─GELU: 1-1                                        --
+├─Conv2d: 1-2                                      9,280
+├─ModuleList: 1-3                                  --
+│    └─ModuleList: 2-1                             --
+│    │    └─Down: 3-1                              --
+│    │    │    └─AvgPool2d: 4-1                    --
+│    │    │    └─ModuleList: 4-2                   --
+│    │    │    │    └─ConvBlock: 5-1               104,160
+│    │    │    └─Conv2d: 4-3                       5,200
+│    │    └─Down: 3-2                              --
+│    │    │    └─AvgPool2d: 4-4                    --
+│    │    │    └─ModuleList: 4-5                   --
+│    │    │    │    └─ConvBlock: 5-2               220,200
+│    │    │    └─Conv2d: 4-6                       8,100
+│    │    └─Down: 3-3                              --
+│    │    │    └─AvgPool2d: 4-7                    --
+│    │    │    └─ModuleList: 4-8                   --
+│    │    │    │    └─ConvBlock: 5-3               325,875
+│    │    │    └─Conv2d: 4-9                       12,625
+│    │    └─Down: 3-4                              --
+│    │    │    └─AvgPool2d: 4-10                   --
+│    │    │    └─ModuleList: 4-11                  --
+│    │    │    │    └─ConvBlock: 5-4               485,316
+│    │    │    └─Conv2d: 4-12                      19,656
+│    └─ModuleList: 2-2                             --
+│    │    └─Down: 3-5                              --
+│    │    │    └─AvgPool2d: 4-13                   --
+│    │    │    └─ModuleList: 4-14                  --
+│    │    │    │    └─ConvBlock: 5-5               104,160
+│    │    │    └─Conv2d: 4-15                      5,200
+│    │    └─Down: 3-6                              --
+│    │    │    └─AvgPool2d: 4-16                   --
+│    │    │    └─ModuleList: 4-17                  --
+│    │    │    │    └─ConvBlock: 5-6               220,200
+│    │    │    └─Conv2d: 4-18                      8,100
+│    │    └─Down: 3-7                              --
+│    │    │    └─AvgPool2d: 4-19                   --
+│    │    │    └─ModuleList: 4-20                  --
+│    │    │    │    └─ConvBlock: 5-7               325,875
+│    │    │    └─Conv2d: 4-21                      12,625
+│    │    └─Down: 3-8                              --
+│    │    │    └─AvgPool2d: 4-22                   --
+│    │    │    └─ModuleList: 4-23                  --
+│    │    │    │    └─ConvBlock: 5-8               485,316
+│    │    │    └─Conv2d: 4-24                      19,656
+│    └─ModuleList: 2-3                             --
+│    │    └─Down: 3-9                              --
+│    │    │    └─AvgPool2d: 4-25                   --
+│    │    │    └─ModuleList: 4-26                  --
+│    │    │    │    └─ConvBlock: 5-9               104,160
+│    │    │    └─Conv2d: 4-27                      5,200
+│    │    └─Down: 3-10                             --
+│    │    │    └─AvgPool2d: 4-28                   --
+│    │    │    └─ModuleList: 4-29                  --
+│    │    │    │    └─ConvBlock: 5-10              220,200
+│    │    │    └─Conv2d: 4-30                      8,100
+│    │    └─Down: 3-11                             --
+│    │    │    └─AvgPool2d: 4-31                   --
+│    │    │    └─ModuleList: 4-32                  --
+│    │    │    │    └─ConvBlock: 5-11              325,875
+│    │    │    └─Conv2d: 4-33                      12,625
+│    │    └─Down: 3-12                             --
+│    │    │    └─AvgPool2d: 4-34                   --
+│    │    │    └─ModuleList: 4-35                  --
+│    │    │    │    └─ConvBlock: 5-12              485,316
+│    │    │    └─Conv2d: 4-36                      19,656
+│    └─ModuleList: 2-4                             --
+│    │    └─Down: 3-13                             --
+│    │    │    └─AvgPool2d: 4-37                   --
+│    │    │    └─ModuleList: 4-38                  --
+│    │    │    │    └─ConvBlock: 5-13              104,160
+│    │    │    └─Conv2d: 4-39                      5,200
+│    │    └─Down: 3-14                             --
+│    │    │    └─AvgPool2d: 4-40                   --
+│    │    │    └─ModuleList: 4-41                  --
+│    │    │    │    └─ConvBlock: 5-14              220,200
+│    │    │    └─Conv2d: 4-42                      8,100
+│    │    └─Down: 3-15                             --
+│    │    │    └─AvgPool2d: 4-43                   --
+│    │    │    └─ModuleList: 4-44                  --
+│    │    │    │    └─ConvBlock: 5-15              325,875
+│    │    │    └─Conv2d: 4-45                      12,625
+│    │    └─Down: 3-16                             --
+│    │    │    └─AvgPool2d: 4-46                   --
+│    │    │    └─ModuleList: 4-47                  --
+│    │    │    │    └─ConvBlock: 5-16              485,316
+│    │    │    └─Conv2d: 4-48                      19,656
+│    └─ModuleList: 2-5                             --
+│    │    └─Down: 3-17                             --
+│    │    │    └─AvgPool2d: 4-49                   --
+│    │    │    └─ModuleList: 4-50                  --
+│    │    │    │    └─ConvBlock: 5-17              104,160
+│    │    │    └─Conv2d: 4-51                      5,200
+│    │    └─Down: 3-18                             --
+│    │    │    └─AvgPool2d: 4-52                   --
+│    │    │    └─ModuleList: 4-53                  --
+│    │    │    │    └─ConvBlock: 5-18              220,200
+│    │    │    └─Conv2d: 4-54                      8,100
+│    │    └─Down: 3-19                             --
+│    │    │    └─AvgPool2d: 4-55                   --
+│    │    │    └─ModuleList: 4-56                  --
+│    │    │    │    └─ConvBlock: 5-19              325,875
+│    │    │    └─Conv2d: 4-57                      12,625
+│    │    └─Down: 3-20                             --
+│    │    │    └─AvgPool2d: 4-58                   --
+│    │    │    └─ModuleList: 4-59                  --
+│    │    │    │    └─ConvBlock: 5-20              485,316
+│    │    │    └─Conv2d: 4-60                      19,656
+│    └─ModuleList: 2-6                             --
+│    │    └─Down: 3-21                             --
+│    │    │    └─AvgPool2d: 4-61                   --
+│    │    │    └─ModuleList: 4-62                  --
+│    │    │    │    └─ConvBlock: 5-21              104,160
+│    │    │    └─Conv2d: 4-63                      5,200
+│    │    └─Down: 3-22                             --
+│    │    │    └─AvgPool2d: 4-64                   --
+│    │    │    └─ModuleList: 4-65                  --
+│    │    │    │    └─ConvBlock: 5-22              220,200
+│    │    │    └─Conv2d: 4-66                      8,100
+│    │    └─Down: 3-23                             --
+│    │    │    └─AvgPool2d: 4-67                   --
+│    │    │    └─ModuleList: 4-68                  --
+│    │    │    │    └─ConvBlock: 5-23              325,875
+│    │    │    └─Conv2d: 4-69                      12,625
+│    │    └─Down: 3-24                             --
+│    │    │    └─AvgPool2d: 4-70                   --
+│    │    │    └─ModuleList: 4-71                  --
+│    │    │    │    └─ConvBlock: 5-24              485,316
+│    │    │    └─Conv2d: 4-72                      19,656
+│    └─ModuleList: 2-7                             --
+│    │    └─Down: 3-25                             --
+│    │    │    └─AvgPool2d: 4-73                   --
+│    │    │    └─ModuleList: 4-74                  --
+│    │    │    │    └─ConvBlock: 5-25              104,160
+│    │    │    └─Conv2d: 4-75                      5,200
+│    │    └─Down: 3-26                             --
+│    │    │    └─AvgPool2d: 4-76                   --
+│    │    │    └─ModuleList: 4-77                  --
+│    │    │    │    └─ConvBlock: 5-26              220,200
+│    │    │    └─Conv2d: 4-78                      8,100
+│    │    └─Down: 3-27                             --
+│    │    │    └─AvgPool2d: 4-79                   --
+│    │    │    └─ModuleList: 4-80                  --
+│    │    │    │    └─ConvBlock: 5-27              325,875
+│    │    │    └─Conv2d: 4-81                      12,625
+│    │    └─Down: 3-28                             --
+│    │    │    └─AvgPool2d: 4-82                   --
+│    │    │    └─ModuleList: 4-83                  --
+│    │    │    │    └─ConvBlock: 5-28              485,316
+│    │    │    └─Conv2d: 4-84                      19,656
+│    └─ModuleList: 2-8                             --
+│    │    └─Down: 3-29                             --
+│    │    │    └─AvgPool2d: 4-85                   --
+│    │    │    └─ModuleList: 4-86                  --
+│    │    │    │    └─ConvBlock: 5-29              104,160
+│    │    │    └─Conv2d: 4-87                      5,200
+│    │    └─Down: 3-30                             --
+│    │    │    └─AvgPool2d: 4-88                   --
+│    │    │    └─ModuleList: 4-89                  --
+│    │    │    │    └─ConvBlock: 5-30              220,200
+│    │    │    └─Conv2d: 4-90                      8,100
+│    │    └─Down: 3-31                             --
+│    │    │    └─AvgPool2d: 4-91                   --
+│    │    │    └─ModuleList: 4-92                  --
+│    │    │    │    └─ConvBlock: 5-31              325,875
+│    │    │    └─Conv2d: 4-93                      12,625
+│    │    └─Down: 3-32                             --
+│    │    │    └─AvgPool2d: 4-94                   --
+│    │    │    └─ModuleList: 4-95                  --
+│    │    │    │    └─ConvBlock: 5-32              485,316
+│    │    │    └─Conv2d: 4-96                      19,656
+├─ModuleList: 1-4                                  --
+│    └─ModuleList: 2-9                             --
+│    │    └─Up: 3-33                               --
+│    │    │    └─circular_interpolate: 4-97        --
+│    │    │    └─ModuleList: 4-98                  --
+│    │    │    │    └─ConvBlock: 5-33              457,500
+│    │    │    └─Conv2d: 4-99                      19,625
+│    │    └─Up: 3-34                               --
+│    │    │    └─circular_interpolate: 4-100       --
+│    │    │    └─ModuleList: 4-101                 --
+│    │    │    │    └─ConvBlock: 5-34              293,100
+│    │    │    └─Conv2d: 4-102                     12,600
+│    │    └─Up: 3-35                               --
+│    │    │    └─circular_interpolate: 4-103       --
+│    │    │    └─ModuleList: 4-104                 --
+│    │    │    │    └─ConvBlock: 5-35              187,680
+│    │    │    └─Conv2d: 4-105                     8,080
+│    │    └─Up: 3-36                               --
+│    │    │    └─circular_interpolate: 4-106       --
+│    │    │    └─ModuleList: 4-107                 --
+│    │    │    │    └─ConvBlock: 5-36              120,192
+│    │    │    └─Conv2d: 4-108                     5,184
+│    └─ModuleList: 2-10                            --
+│    │    └─Up: 3-37                               --
+│    │    │    └─circular_interpolate: 4-109       --
+│    │    │    └─ModuleList: 4-110                 --
+│    │    │    │    └─ConvBlock: 5-37              457,500
+│    │    │    └─Conv2d: 4-111                     19,625
+│    │    └─Up: 3-38                               --
+│    │    │    └─circular_interpolate: 4-112       --
+│    │    │    └─ModuleList: 4-113                 --
+│    │    │    │    └─ConvBlock: 5-38              293,100
+│    │    │    └─Conv2d: 4-114                     12,600
+│    │    └─Up: 3-39                               --
+│    │    │    └─circular_interpolate: 4-115       --
+│    │    │    └─ModuleList: 4-116                 --
+│    │    │    │    └─ConvBlock: 5-39              187,680
+│    │    │    └─Conv2d: 4-117                     8,080
+│    │    └─Up: 3-40                               --
+│    │    │    └─circular_interpolate: 4-118       --
+│    │    │    └─ModuleList: 4-119                 --
+│    │    │    │    └─ConvBlock: 5-40              120,192
+│    │    │    └─Conv2d: 4-120                     5,184
+│    └─ModuleList: 2-11                            --
+│    │    └─Up: 3-41                               --
+│    │    │    └─circular_interpolate: 4-121       --
+│    │    │    └─ModuleList: 4-122                 --
+│    │    │    │    └─ConvBlock: 5-41              457,500
+│    │    │    └─Conv2d: 4-123                     19,625
+│    │    └─Up: 3-42                               --
+│    │    │    └─circular_interpolate: 4-124       --
+│    │    │    └─ModuleList: 4-125                 --
+│    │    │    │    └─ConvBlock: 5-42              293,100
+│    │    │    └─Conv2d: 4-126                     12,600
+│    │    └─Up: 3-43                               --
+│    │    │    └─circular_interpolate: 4-127       --
+│    │    │    └─ModuleList: 4-128                 --
+│    │    │    │    └─ConvBlock: 5-43              187,680
+│    │    │    └─Conv2d: 4-129                     8,080
+│    │    └─Up: 3-44                               --
+│    │    │    └─circular_interpolate: 4-130       --
+│    │    │    └─ModuleList: 4-131                 --
+│    │    │    │    └─ConvBlock: 5-44              120,192
+│    │    │    └─Conv2d: 4-132                     5,184
+│    └─ModuleList: 2-12                            --
+│    │    └─Up: 3-45                               --
+│    │    │    └─circular_interpolate: 4-133       --
+│    │    │    └─ModuleList: 4-134                 --
+│    │    │    │    └─ConvBlock: 5-45              457,500
+│    │    │    └─Conv2d: 4-135                     19,625
+│    │    └─Up: 3-46                               --
+│    │    │    └─circular_interpolate: 4-136       --
+│    │    │    └─ModuleList: 4-137                 --
+│    │    │    │    └─ConvBlock: 5-46              293,100
+│    │    │    └─Conv2d: 4-138                     12,600
+│    │    └─Up: 3-47                               --
+│    │    │    └─circular_interpolate: 4-139       --
+│    │    │    └─ModuleList: 4-140                 --
+│    │    │    │    └─ConvBlock: 5-47              187,680
+│    │    │    └─Conv2d: 4-141                     8,080
+│    │    └─Up: 3-48                               --
+│    │    │    └─circular_interpolate: 4-142       --
+│    │    │    └─ModuleList: 4-143                 --
+│    │    │    │    └─ConvBlock: 5-48              120,192
+│    │    │    └─Conv2d: 4-144                     5,184
+│    └─ModuleList: 2-13                            --
+│    │    └─Up: 3-49                               --
+│    │    │    └─circular_interpolate: 4-145       --
+│    │    │    └─ModuleList: 4-146                 --
+│    │    │    │    └─ConvBlock: 5-49              457,500
+│    │    │    └─Conv2d: 4-147                     19,625
+│    │    └─Up: 3-50                               --
+│    │    │    └─circular_interpolate: 4-148       --
+│    │    │    └─ModuleList: 4-149                 --
+│    │    │    │    └─ConvBlock: 5-50              293,100
+│    │    │    └─Conv2d: 4-150                     12,600
+│    │    └─Up: 3-51                               --
+│    │    │    └─circular_interpolate: 4-151       --
+│    │    │    └─ModuleList: 4-152                 --
+│    │    │    │    └─ConvBlock: 5-51              187,680
+│    │    │    └─Conv2d: 4-153                     8,080
+│    │    └─Up: 3-52                               --
+│    │    │    └─circular_interpolate: 4-154       --
+│    │    │    └─ModuleList: 4-155                 --
+│    │    │    │    └─ConvBlock: 5-52              120,192
+│    │    │    └─Conv2d: 4-156                     5,184
+│    └─ModuleList: 2-14                            --
+│    │    └─Up: 3-53                               --
+│    │    │    └─circular_interpolate: 4-157       --
+│    │    │    └─ModuleList: 4-158                 --
+│    │    │    │    └─ConvBlock: 5-53              457,500
+│    │    │    └─Conv2d: 4-159                     19,625
+│    │    └─Up: 3-54                               --
+│    │    │    └─circular_interpolate: 4-160       --
+│    │    │    └─ModuleList: 4-161                 --
+│    │    │    │    └─ConvBlock: 5-54              293,100
+│    │    │    └─Conv2d: 4-162                     12,600
+│    │    └─Up: 3-55                               --
+│    │    │    └─circular_interpolate: 4-163       --
+│    │    │    └─ModuleList: 4-164                 --
+│    │    │    │    └─ConvBlock: 5-55              187,680
+│    │    │    └─Conv2d: 4-165                     8,080
+│    │    └─Up: 3-56                               --
+│    │    │    └─circular_interpolate: 4-166       --
+│    │    │    └─ModuleList: 4-167                 --
+│    │    │    │    └─ConvBlock: 5-56              120,192
+│    │    │    └─Conv2d: 4-168                     5,184
+│    └─ModuleList: 2-15                            --
+│    │    └─Up: 3-57                               --
+│    │    │    └─circular_interpolate: 4-169       --
+│    │    │    └─ModuleList: 4-170                 --
+│    │    │    │    └─ConvBlock: 5-57              457,500
+│    │    │    └─Conv2d: 4-171                     19,625
+│    │    └─Up: 3-58                               --
+│    │    │    └─circular_interpolate: 4-172       --
+│    │    │    └─ModuleList: 4-173                 --
+│    │    │    │    └─ConvBlock: 5-58              293,100
+│    │    │    └─Conv2d: 4-174                     12,600
+│    │    └─Up: 3-59                               --
+│    │    │    └─circular_interpolate: 4-175       --
+│    │    │    └─ModuleList: 4-176                 --
+│    │    │    │    └─ConvBlock: 5-59              187,680
+│    │    │    └─Conv2d: 4-177                     8,080
+│    │    └─Up: 3-60                               --
+│    │    │    └─circular_interpolate: 4-178       --
+│    │    │    └─ModuleList: 4-179                 --
+│    │    │    │    └─ConvBlock: 5-60              120,192
+│    │    │    └─Conv2d: 4-180                     5,184
+│    └─ModuleList: 2-16                            --
+│    │    └─Up: 3-61                               --
+│    │    │    └─circular_interpolate: 4-181       --
+│    │    │    └─ModuleList: 4-182                 --
+│    │    │    │    └─ConvBlock: 5-61              457,500
+│    │    │    └─Conv2d: 4-183                     19,625
+│    │    └─Up: 3-62                               --
+│    │    │    └─circular_interpolate: 4-184       --
+│    │    │    └─ModuleList: 4-185                 --
+│    │    │    │    └─ConvBlock: 5-62              293,100
+│    │    │    └─Conv2d: 4-186                     12,600
+│    │    └─Up: 3-63                               --
+│    │    │    └─circular_interpolate: 4-187       --
+│    │    │    └─ModuleList: 4-188                 --
+│    │    │    │    └─ConvBlock: 5-63              187,680
+│    │    │    └─Conv2d: 4-189                     8,080
+│    │    └─Up: 3-64                               --
+│    │    │    └─circular_interpolate: 4-190       --
+│    │    │    └─ModuleList: 4-191                 --
+│    │    │    │    └─ConvBlock: 5-64              120,192
+│    │    │    └─Conv2d: 4-192                     5,184
+├─Conv2d: 1-5                                      2,308
+===========================================================================
+Total params: 18,292,332
+Trainable params: 18,292,332
+Non-trainable params: 0
+===========================================================================
+[2025-04-22 15:26:57,026][the_well][INFO] - Instantiate optimizer torch.optim.AdamW
+[2025-04-22 15:26:57,029][the_well][INFO] - Instantiate learning rate scheduler the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+[2025-04-22 15:26:57,036][the_well][INFO] - Final configuration:
+data_workers: 14
+wandb_project_name: the_well_convnext
+data:
+  _target_: the_well.data.WellDataModule
+  batch_size: 64
+  well_base_path: /home/kschmidt/the_well/datasets
+  well_dataset_name: turbulent_radiative_layer_2D
+  use_normalization: true
+  min_dt_stride: 1
+  max_dt_stride: 1
+  n_steps_input: 4
+  n_steps_output: 1
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+model:
+  _target_: the_well.benchmark.models.sinenet.SineNet
+  n_input_scalar_components: 2
+  n_input_vector_components: 1
+  n_output_scalar_components: 2
+  n_output_vector_components: 1
+  time_history: 4
+  time_future: 1
+  hidden_channels: 64
+  padding_mode: circular
+  activation: gelu
+  num_layers: 4
+  num_waves: 8
+  norm: true
+  mult: 1.25
+trainer:
+  loss_fn:
+    _target_: the_well.benchmark.metrics.CustomMSELoss
+  formatter: sinenet_formatter
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 495
+  val_frequency: 1
+  rollout_val_frequency: 2
+  short_validation_length: 20
+  max_rollout_steps: 100
+  num_time_intervals: 5
+  make_rollout_videos: false
+  checkpoint_frequency: 20
+  checkpoint_path: ''
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0002
+name: SineNet_8_(64-125)
+experiment_dir: experiments/
+auto_resume: false
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+
+[2025-04-22 15:26:57,036][the_well][INFO] - Instantiate trainer the_well.benchmark.trainer.Trainer
+[2025-04-22 15:26:57,042][the_well.benchmark.trainer.training][INFO] - Epoch 1/495: starting training
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mSineNet_8_(64-125)-SineNet-0.0002[0m at: [34mhttps://wandb.ai/kato-schmidt-university-of-amsterdam/the_well_convnext/runs/xgacvve6[0m
+
+JOB STATISTICS
+==============
+Job ID: 11319837
+Cluster: snellius
+User/Group: kschmidt/kschmidt
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 32
+CPU Utilized: 00:00:53
+CPU Efficiency: 6.90% of 00:12:48 core-walltime
+Job Wall-clock time: 00:00:24
+Memory Utilized: 1.70 MB
+Memory Efficiency: 0.00% of 180.00 GB (180.00 GB/node)
