@@ -8,7 +8,7 @@ defaults:
 
 wandb_project_name: "the_well_sinenet_test"
 
-epochs: 4
+epochs: 25
 val_frequency: 1
 short_validation_length: 4
 max_rollout_steps: 10
