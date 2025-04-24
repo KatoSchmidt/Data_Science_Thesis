@@ -1,6 +1,6 @@
 _target_: the_well.data.WellDataModule
-batch_size: 64
-well_base_path: /home/kschmidt/the_well/datasets
+batch_size: 16 #64
+well_base_path:  /Users/katoschmidt/Desktop/the_well/datasets  #/home/kschmidt/the_well/datasets 
 well_dataset_name: turbulent_radiative_layer_2D
 use_normalization: True
 min_dt_stride: 1
@@ -13,6 +13,6 @@ normalization_type:
 train_dataset: 
     _partial_: true
     _target_: the_well.data.datasets.WellDataset
-# include_filters: 
-#      - turbulent_radiative_layer_tcool_0.03.hdf5
+include_filters: 
+     - turbulent_radiative_layer_tcool_0.03.hdf5
 

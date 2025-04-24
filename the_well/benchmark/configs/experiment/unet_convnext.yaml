@@ -7,5 +7,9 @@ trainer:
     _target_: the_well.benchmark.metrics.MSE
   formatter: channels_first_default
 
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 5E-3
+
 
 name: unet_convnext

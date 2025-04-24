@@ -139,6 +139,7 @@ def main(cfg: DictConfig):
 
     logger.info(f"Run experiment {experiment_name}")
     logger.info(f"Configuration:\n{OmegaConf.to_yaml(cfg)}")
+
     # Initiate wandb logging
     wandb_logged_cfg = OmegaConf.to_container(cfg, resolve=True)
     wandb_logged_cfg["experiment_folder"] = experiment_folder

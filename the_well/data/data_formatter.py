@@ -42,7 +42,7 @@ class SineNetFormatter(AbstractDataFormatter):
         return (torch.nan_to_num(x),), torch.nan_to_num(y)
 
     def process_output_channel_last(self, output: torch.Tensor) -> torch.Tensor:
-        return output # terug naar original format
+        return rearrange(output, "b t c h w -> b t h w c")
 
     def process_output_after_denomalize(self, output: torch.Tensor) -> torch.Tensor:
         return rearrange(output, "b t h w c -> b t c h w") # terug naar original format

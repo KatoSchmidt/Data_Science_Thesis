@@ -1,11 +1,11 @@
 defaults:
   - defaults
 
-epochs: 25
+epochs: 4
 val_frequency: 1
-short_validation_length: 4
 max_rollout_steps: 12
-num_time_intervals: 3
+rollout_val_frequency: 1
+
 
 
 

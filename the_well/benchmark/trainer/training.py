@@ -247,6 +247,7 @@ class Trainer:
                     #y_pred = self.formatter.process_output_after_denomalize(y_pred)
                 else:
                     moving_batch, y_pred = self.denormalize(moving_batch, y_pred)
+
             if (not train) and self.is_delta:
                 assert {
                     moving_batch["input_fields"][:, -1, ...].shape == y_pred.shape
@@ -255,6 +256,7 @@ class Trainer:
                 and prediction {y_pred.shape}"
                 )
                 y_pred = moving_batch["input_fields"][:, -1, ...] + y_pred
+
             y_pred = formatter.process_output_expand_time(y_pred)
             # If not last step, update moving batch for autoregressive prediction
             if i != rollout_steps - 1:
@@ -262,8 +264,14 @@ class Trainer:
                     [moving_batch["input_fields"][:, 1:], y_pred], dim=1
                 )
             y_preds.append(y_pred)
+
         y_pred_out = torch.cat(y_preds, dim=1)
         y_ref = y_ref.to(self.device)
+
+
+        if isinstance(self.formatter, (SineNetFormatter)):
+            y_ref = self.formatter.process_output_channel_last(y_ref)
+
 
         # AANGEPAST
         if not train:
@@ -350,7 +358,7 @@ class Trainer:
                 # Go through losses
                 for loss_fn in self.validation_suite:
                     # Mean over batch and time per field
-                    # print(" y_pred, y_ref,: ", y_pred.shape, y_ref.shape)
+                    print(" y_pred, y_ref,: ", y_pred.shape, y_ref.shape)
                     loss = loss_fn(y_pred, y_ref, self.dset_metadata)
                 
                     # Some losses return multiple values for efficiency
@@ -361,9 +369,10 @@ class Trainer:
                     
                     # print("LOSS items: ", loss.items())
                     for k, v in loss.items():
-                        # print("v.shape: ", v.shape)
+                        print( "LOSS : ", k)
+                        print("v.shape: ", v.shape)
                         sub_loss = v.mean(0)
-                        # print("SUB_LOSS: ", sub_loss.shape)
+                        print("SUB_LOSS: ", sub_loss.shape)
 
                         new_losses, new_time_logs = self.split_up_losses(
                             sub_loss, k, dset_name, field_names
@@ -416,15 +425,16 @@ class Trainer:
                 batch_time = time.time() - batch_start
                 y_pred, y_ref = self.rollout_model(self.model, batch, self.formatter)
                 forward_time = time.time() - batch_start - batch_time
-                # print("TRAINING PREDICTIONS SHAPE: ",y_ref.shape, y_pred.shape)
+                print("TRAINING PREDICTIONS SHAPE: ",y_ref.shape, y_pred.shape)
                 assert y_ref.shape == y_pred.shape, (
                     f"Mismatching shapes between reference {y_ref.shape} and prediction {y_pred.shape}"
                 )
                 if isinstance(self.loss_fn, (CustomMSELoss, ScaledLpLoss)):
                     y_pred = self.formatter.process_output_denormalize(y_pred)
                     y_ref = self.formatter.process_output_denormalize(y_ref)
+
                 loss = self.loss_fn(y_pred, y_ref, self.dset_metadata).mean()
-                # print("TRAINING LOSS SHAPE: ",y_ref.shape, y_pred.shape)
+                print("TRAINING LOSS SHAPE: ",y_ref.shape, y_pred.shape)
                 
             self.grad_scaler.scale(loss).backward()
             self.grad_scaler.step(self.optimizer)
