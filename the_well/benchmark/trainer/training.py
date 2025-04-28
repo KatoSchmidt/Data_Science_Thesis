@@ -358,7 +358,7 @@ class Trainer:
                 # Go through losses
                 for loss_fn in self.validation_suite:
                     # Mean over batch and time per field
-                    print(" y_pred, y_ref,: ", y_pred.shape, y_ref.shape)
+                    # print(" y_pred, y_ref,: ", y_pred.shape, y_ref.shape)
                     loss = loss_fn(y_pred, y_ref, self.dset_metadata)
                 
                     # Some losses return multiple values for efficiency
@@ -369,10 +369,10 @@ class Trainer:
                     
                     # print("LOSS items: ", loss.items())
                     for k, v in loss.items():
-                        print( "LOSS : ", k)
-                        print("v.shape: ", v.shape)
+                        # print( "LOSS : ", k)
+                        # print("v.shape: ", v.shape)
                         sub_loss = v.mean(0)
-                        print("SUB_LOSS: ", sub_loss.shape)
+                        # print("SUB_LOSS: ", sub_loss.shape)
 
                         new_losses, new_time_logs = self.split_up_losses(
                             sub_loss, k, dset_name, field_names
@@ -425,7 +425,7 @@ class Trainer:
                 batch_time = time.time() - batch_start
                 y_pred, y_ref = self.rollout_model(self.model, batch, self.formatter)
                 forward_time = time.time() - batch_start - batch_time
-                print("TRAINING PREDICTIONS SHAPE: ",y_ref.shape, y_pred.shape)
+                # print("TRAINING PREDICTIONS SHAPE: ",y_ref.shape, y_pred.shape)
                 assert y_ref.shape == y_pred.shape, (
                     f"Mismatching shapes between reference {y_ref.shape} and prediction {y_pred.shape}"
                 )
@@ -434,7 +434,7 @@ class Trainer:
                     y_ref = self.formatter.process_output_denormalize(y_ref)
 
                 loss = self.loss_fn(y_pred, y_ref, self.dset_metadata).mean()
-                print("TRAINING LOSS SHAPE: ",y_ref.shape, y_pred.shape)
+                # print("TRAINING LOSS SHAPE: ",y_ref.shape, y_pred.shape)
                 
             self.grad_scaler.scale(loss).backward()
             self.grad_scaler.step(self.optimizer)
