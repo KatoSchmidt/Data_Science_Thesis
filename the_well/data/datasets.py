@@ -740,14 +740,16 @@ class WellDataset(Dataset):
             ]
             # Then concatenate them along new single channel
             if data[key]:
-                data[key] = torch.concatenate(data[key], dim=-1)
+                # data[key] = torch.concatenate(data[key], dim=-1)
+                data[key] = torch.cat(data[key], dim=-1)
             else:
                 data[key] = torch.tensor([])
         # Then do the same for scalars but no flattening since no tensor-order
         for key in ("variable_scalars", "constant_scalars"):
             data[key] = [scalar.unsqueeze(-1) for _, scalar in data[key].items()]
             if data[key]:
-                data[key] = torch.concatenate(data[key], dim=-1)
+                # data[key] = torch.concatenate(data[key], dim=-1)
+                data[key] = torch.cat(data[key], dim=-1)
             else:
                 data[key] = torch.tensor([])
 
