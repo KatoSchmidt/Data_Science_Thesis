@@ -64,6 +64,8 @@ class Trainer:
         enable_amp: bool = False,
         amp_type: str = "float16",  # bfloat not supported in FFT
         checkpoint_path: str = "",
+        early_stopping: bool= False,
+        patience: int= 20,
     ):
         """
         Class in charge of the training loop. It performs train, validation and test.
@@ -140,6 +142,9 @@ class Trainer:
         )
         self.is_distributed = is_distributed
         self.best_val_loss = None
+        self.best_rollout_loss = None 
+        self.best_val_vrmse = None
+        self.best_rollout_vrmse = None
         self.starting_val_loss = float("inf")
         self.dset_metadata = self.datamodule.train_dataset.metadata
         if self.datamodule.train_dataset.use_normalization:
@@ -150,6 +155,11 @@ class Trainer:
             self.formatter = DefaultChannelsLastFormatter(self.dset_metadata)
         elif formatter == "sinenet_formatter":
             self.formatter = SineNetFormatter(self.dset_metadata)
+
+        # EARLY STOPPING 
+        self.patience = patience 
+        self.num_early_stopping_epochs = 0
+        self.early_stopping = early_stopping  # toggle aan/uit
 
         if len(checkpoint_path) > 0:
             self.load_checkpoint(checkpoint_path)
@@ -477,9 +487,9 @@ class Trainer:
             train_logs |= {"train": train_loss, "epoch": epoch}
             wandb.log(train_logs, step=epoch)
             # Save the most recent iteration
-            self.save_model(
-                epoch, val_loss, os.path.join(self.checkpoint_folder, "recent.pt")
-            )
+            # self.save_model(
+            #     epoch, val_loss, os.path.join(self.checkpoint_folder, "recent.pt")
+            # )
             # Check for periodic checkpointing
             if (
                 self.checkpoint_frequency >= 1
@@ -503,10 +513,31 @@ class Trainer:
                 wandb.log(val_loss_dict, step=epoch)
                 if self.best_val_loss is None or val_loss < self.best_val_loss:
                     self.best_val_loss = val_loss
+                    self.num_early_stopping_epochs = 0  # reset when improvement 
                     self.save_model(
                         epoch, val_loss, os.path.join(self.checkpoint_folder, "best.pt")
                     )
                     logger.info(f"Epoch {epoch}: new best val loss = {val_loss:.4f}")
+                else:
+                    self.num_early_stopping_epochs += 1
+                    logger.info(f"No improvement in validation loss for {self.num_early_stopping_epochs} epoch(s)")
+
+                    # Early stopping check
+                    if self.early_stopping and self.num_early_stopping_epochs >= self.patience:
+                        logger.info(
+                            f"Early stopping triggered at epoch {epoch}: no improvement for {self.patience} epochs."
+                        )
+                        wandb.log({"early_stopping_triggered": 1}, step=epoch)
+                        break
+                # Save best on VRMSE
+                val_vrmse_key = f"valid_{self.dset_metadata.dataset_name}/full_VRMSE_T=all"
+                if val_vrmse_key in val_loss_dict:
+                    val_vrmse = val_loss_dict[val_vrmse_key]
+                    if self.best_val_vrmse is None or val_vrmse < self.best_val_vrmse:
+                        self.best_val_vrmse = val_vrmse
+                        self.save_model(epoch, val_vrmse, os.path.join(self.checkpoint_folder, "best_VRMSE.pt"))
+                        logger.info(f"Epoch {epoch}: new best VRMSE val loss = {val_vrmse:.4f}")
+
             # Check if time for expensive validation - periodic or final
             if epoch % self.rollout_val_frequency == 0 or (epoch == self.max_epoch):
                 logger.info(
@@ -526,6 +557,20 @@ class Trainer:
                     "epoch": epoch,
                 }
                 wandb.log(rollout_val_loss_dict, step=epoch)
+                if self.best_rollout_loss is None or rollout_val_loss < self.best_rollout_loss:
+                    self.best_rollout_loss = rollout_val_loss
+                    self.save_model(
+                        epoch, rollout_val_loss, os.path.join(self.checkpoint_folder, "best_rollout.pt")
+                    )
+                    logger.info(f"Epoch {epoch}: new best rollout loss = {rollout_val_loss:.4f}")
+                 # Best rollout on VRMSE
+                # rollout_vrmse_key = f"rollout_valid_{self.dset_metadata.dataset_name}/full_VRMSE_T=all"
+                # if rollout_vrmse_key in rollout_val_loss_dict:
+                #     rollout_vrmse = rollout_val_loss_dict[rollout_vrmse_key]
+                #     if self.best_rollout_vrmse is None or rollout_vrmse < self.best_rollout_vrmse:
+                #         self.best_rollout_vrmse = rollout_vrmse
+                #         self.save_model(epoch, rollout_vrmse, os.path.join(self.checkpoint_folder, "best_rollout_VRMSE.pt"))
+                #         logger.info(f"Epoch {epoch}: new best rollout VRMSE loss = {rollout_vrmse:.4f}")
 
         test_loss, test_logs = self.validation_loop(
             test_dataloader,
@@ -594,3 +639,6 @@ class Trainer:
             "epoch": self.max_epoch + 1,
         }
         wandb.log(test_logs, step=epoch)
+
+
+

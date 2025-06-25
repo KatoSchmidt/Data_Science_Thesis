@@ -2,10 +2,10 @@ defaults:
   - _self_
   - data: turbulent_radiative_layer_2D
   - lr_scheduler: cosine_with_warmup
-  - experiment: sinenet #unet_convnext
+  - experiment:  swinnet
   - trainer: defaults
   - server: local
   - resume_overrides: no_overrides
 
 data_workers: 14
-wandb_project_name: "the_well_convnext"
+wandb_project_name: "the_well"

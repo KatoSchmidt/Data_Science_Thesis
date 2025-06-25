@@ -12,4 +12,4 @@ optimizer:
   lr: 5E-3
 
 
-name: unet_convnext
+name: run3

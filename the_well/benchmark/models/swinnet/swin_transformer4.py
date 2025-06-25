@@ -4,6 +4,8 @@ from functools import partial
 from einops import rearrange
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
+import numpy as np 
 
 
 # SwinU-net Model
@@ -23,12 +25,12 @@ class SwinTransformerUnet(nn.Module):
         self,
         img_size=(128, 384),
         patch_size=4,
-        in_chans=4,
+        in_chans=16,
         num_output_fields=4,  #velocity_x, velocity_y, pressure, temperature
-        embed_dim=96,
+        embed_dim=64,
         depths=[2, 2, 2, 2],
         num_heads=[3, 6, 12, 24],
-        window_size=7,
+        window_size=8,
         mlp_ratio=4.0,
         qkv_bias=True,
         qk_scale=None,
@@ -36,7 +38,10 @@ class SwinTransformerUnet(nn.Module):
         attn_drop_rate=0.0,
         drop_path_rate=0.1,
         norm_layer=nn.LayerNorm,
-        num_bottleneck_blocks=2
+        num_bottleneck_blocks=2, 
+        refinement = False, 
+        skip_residual = False,
+        residual= False, 
     ):
         super().__init__()
 
@@ -44,6 +49,9 @@ class SwinTransformerUnet(nn.Module):
         self.num_layers = len(depths)
         self.embed_dim = embed_dim
         self.patch_size = patch_size
+        self.refinement = refinement 
+        self.residual = residual
+        self.skip_residual = skip_residual
 
         # Initial patch embedding
         self.patch_embed = PatchEmbed(
@@ -71,6 +79,7 @@ class SwinTransformerUnet(nn.Module):
                 depth=depths[i_layer],
                 downsample=True,
                 block_class=Block,
+                residual = residual,
                 block_kwargs=dict(
                     num_heads=num_heads[i_layer],
                     window_size=window_size,
@@ -82,7 +91,7 @@ class SwinTransformerUnet(nn.Module):
                     attn_drop=attn_drop_rate,
                     drop_path=dpr[sum(depths[:i_layer]):sum(depths[:i_layer + 1])],
                     norm_layer=norm_layer,
-                ),
+                    ),
                 patch_merging_class=PatchMerging
             )
             self.encoder_layers.append(layer)
@@ -103,7 +112,7 @@ class SwinTransformerUnet(nn.Module):
                     drop=drop_rate,
                     attn_drop=attn_drop_rate,
                     drop_path=0.,
-                    norm_layer=norm_layer
+                    norm_layer=norm_layer,
                 ) for _ in range(num_bottleneck_blocks)])
     
         # Decoder 
@@ -122,6 +131,8 @@ class SwinTransformerUnet(nn.Module):
                 depth=depths[i_layer],
                 block_class=Block,
                 patch_expand_class=PatchExpanding,
+                residual = residual,
+                skip_residual = skip_residual,
                 block_kwargs=dict(
                     num_heads=num_heads[i_layer],
                     window_size=window_size,
@@ -143,58 +154,77 @@ class SwinTransformerUnet(nn.Module):
 
 
         # Final upsampling + projection
-        self.final_upsample = PatchExpand_LinearProjection(
-            input_resolution=self.patches_resolution,
-            dim=embed_dim,
-            out_channels=num_output_fields,
-            dim_scale=4,
-            norm_layer=norm_layer
+        self.final_upsample1 = FinalPatchExpanding(input_resolution = resolution, dim = input_dim)
+        resolution = (resolution[0] * 2, resolution[1] * 2)
+        self.final_upsample2 = FinalPatchExpanding(input_resolution = resolution, dim = input_dim)
+
+        #Final Skip Connection
+        self.skip_proj = nn.Linear(in_chans, embed_dim)
+        self.concat_linear = nn.Linear(2 * embed_dim, embed_dim)
+        self.norm = norm_layer(embed_dim)
+        self.skip_conv = nn.Sequential(
+            nn.Conv2d(embed_dim, embed_dim, kernel_size=3, padding=1),
+            nn.GELU(),
+            nn.Conv2d(embed_dim, embed_dim, kernel_size=3, padding=1),
         )
+
+        self.refine_before_projection = RefinementBlock(embed_dim) if refinement else nn.Identity()
+        self.final_projection = LinearProjection(in_channels=embed_dim, out_channels=num_output_fields)
+
+        
     def forward(self, x):
-        """
-        x: [B, in_chans, H, W]
-        returns: [B, num_output_fields, H, W]
-        """
-
-        # print(f"[Input] x: {x.shape}")
-
-        # 1. Patch Partition
+        skips = []
+        skips.append(x)
         x = self.patch_embed(x)
         B, L, C = x.shape
         H, W = self.patches_resolution
-        # print(f"[PatchEmbed] x: {x.shape} | Grid: {self.patches_resolution}")
 
-        # 2. Encoder
-        skips = []
+        # Encoder
         for i, layer in enumerate(self.encoder_layers):
             skips.append(x)
-            # print(f"[Encoder Stage {i + 1} input] x: {x.shape}, H: {H}, W: {W}")
             x, H, W = layer(x, H, W)
-        #     print(f"[Encoder Stage {i + 1} output] x: {x.shape}, H: {H}, W: {W}")
-        
-        # print("skips shape list: ", [x.shape for x in skips])
 
-        # 3. Bottleneck
-        # print(f"[Bottleneck Shape] x: {x.shape}, H: {H}, W: {W}")
+        # Bottleneck
+        bottleneck_residual = x
         for block in self.bottleneck:
             block.H = H
             block.W = W
             x = block(x, mask_matrix=None)
-        # print(f"[After Bottleneck] x: {x.shape}, H: {H}, W: {W}")
 
-        # 4. Decoder
+        if self.residual: 
+            x = x + bottleneck_residual
+
+        # Decoder
         for i, layer in enumerate(self.decoder_layers):
             skip = skips[-(i+1)]
-            # print("skip shape: ", skip.shape)
-            # print(f"[Decoder Stage {i + 1} input]  x: {x.shape}, skip: {skip.shape}, H: {H}, W: {W}")
             x, H, W = layer(x, skip, H, W)
-        #     print(f"[Decoder Stage {i + 1} output]  x: {x.shape}, H: {H}, W: {W}")
 
-        # 5. Final upsample
-        # print(f"[Before Final Upsample] x: {x.shape}, H: {H}, W: {W} ")
-        x = self.final_upsample(x)
-        # print(f"[Final Output] x: {x.shape}")
+        # Final upsampling
+        x = self.final_upsample1(x)
+        H, W = H * 2, W * 2
+        x = self.final_upsample2(x)
+        H, W = H * 2, W * 2
+        
 
+        # Final skip connection
+        x_img = skips[0]  # [B, C_in, H, W]
+        x_img = rearrange(x_img, 'b c h w -> b (h w) c', h = H , w= W )         
+        x_img = self.skip_proj(x_img)                                 
+        
+        x_residual = x 
+        x = torch.cat([x, x_img], dim=2)                                  
+        x = self.concat_linear(x)                                   
+        x = self.norm(x)
+
+        if self.skip_residual:
+            assert x.shape == x_residual.shape, "Shape mismatch in final skip residual"
+            x = x + x_residual
+
+        x = rearrange(x, 'b (h w) c -> b c h w', h=H, w=W)             
+      
+        x = self.refine_before_projection(x)
+        x = self.final_projection(x, H, W)
+ 
         return x
 
 
@@ -222,7 +252,8 @@ class EncoderStage(nn.Module):
         downsample=True,
         block_class=None,
         block_kwargs=None,
-        patch_merging_class=None
+        patch_merging_class=None,
+        residual = False, 
     ):
         super().__init__()
         self.blocks = nn.ModuleList([
@@ -233,7 +264,9 @@ class EncoderStage(nn.Module):
             ) for i in range(depth)])
 
         # print("patch_merging_class(input_resolution, dim): ", downsample)
-        self.downsample = patch_merging_class(input_resolution, dim) if downsample else None
+        # self.downsample = patch_merging_class(input_resolution, dim) if downsample else None
+        self.downsample = patch_merging_class(dim, 2 * dim) if downsample else None
+        self.residual = residual
 
     def forward(self, x, H, W, attn_mask=None):
         """
@@ -241,15 +274,21 @@ class EncoderStage(nn.Module):
         H, W: spatial dimensions
         attn_mask: attention mask for shifted windows
         """
+        encoder_residual = x
         for blk in self.blocks:
             blk.H = H  # Needed inside Swin block
             blk.W = W
             x = blk(x, mask_matrix = attn_mask)
-        
+
+        if self.residual:
+            assert x.shape == encoder_residual.shape, "Shape mismatch in encoder skip residual"
+            x = x + encoder_residual 
+
         # print("encoder downsample: ", self.downsample)
         if self.downsample is not None:
-            x = self.downsample(x)
-            H, W = H // 2, W // 2
+            # x = self.downsample(x)
+            # H, W = H // 2, W // 2
+            x, H, W = self.downsample(x, H, W)
 
         return x, H, W
 
@@ -283,16 +322,19 @@ class DecoderStage(nn.Module):
         patch_expand_class,
         block_kwargs=None,
         norm_layer=nn.LayerNorm,
+        skip_residual = False,
+        residual = False 
     ):
         super().__init__()
         self.upsample = patch_expand_class(input_resolution, dim_in)
         self.concat_linear = nn.Linear(dim_in, dim_out)
-        # print("dim_in + dim_skip: ", dim_in, dim_skip)
-        # print("dim_out: ", dim_out)
         self.norm = norm_layer(dim_out)
         self.blocks = nn.ModuleList([
             block_class(dim=dim_out, **block_kwargs) for _ in range(depth)
         ])
+        self.skip_residual = skip_residual
+        self.residual = residual
+
 
     def forward(self, x, skip, H, W, attn_mask=None):
         # print("shape x before patch expanding: ", x.shape)
@@ -301,27 +343,33 @@ class DecoderStage(nn.Module):
         x = x.reshape(x.size(0), H * W , -1)  # expliciet L = H*2 × W*2
         # print("shape x after patch expanding: ", x.shape)
 
-        # print("x.shape and skip.shape: ", x.shape, skip.shape, H, W)
-
+        decoder_in = x
         x = torch.cat([x, skip], dim=-1)
         # print("X.shape after concat: ", x.shape)
 
         x = self.concat_linear(x)
         x = self.norm(x)
 
+        if self.skip_residual:
+            assert x.shape == decoder_in.shape, "Shape mismatch in decoder skip residual"
+            x = x + decoder_in
+
+        decoder_residual = x 
         for blk in self.blocks:
             blk.H = H
             blk.W = W
             x = blk(x, mask_matrix=attn_mask)
 
-        return x, H, W
+        if self.residual:
+            x = x + decoder_residual
 
+        return x, H, W
 
 
 # Patch Partitioning + Linear Embedding, Patch Merging, Patch Expanding, Final Patch Expanding + Linear Projection
 class PatchEmbed(nn.Module):
     """ Patch Partitioning + Linear Embedding """
-    def __init__(self, img_size=(128, 384), patch_size=4, in_chans= 4, embed_dim= 96, norm_layer=None):
+    def __init__(self, img_size, patch_size, in_chans,  embed_dim, norm_layer=None):
         super().__init__()
         self.img_size = to_2tuple(img_size)
         ## Patchsize 
@@ -340,39 +388,22 @@ class PatchEmbed(nn.Module):
         x = self.norm(x)
         return x
 
+    
 class PatchMerging(nn.Module):
-    """ Patch Merging """
-    def __init__(self, input_resolution, dim):
+    def __init__(self, in_channels, out_channels):
         super().__init__()
-        self.input_resolution = input_resolution  # [H, W]
-        self.dim = dim
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=2, stride=2)
+        self.norm = nn.LayerNorm(out_channels)
 
-        self.reduction = nn.Linear(4 * dim, 2 * dim, bias=False)  # channel reduction
-        self.norm = nn.LayerNorm(4 * dim)
-
-    def forward(self, x):
-        """
-        x: [B, H*W, C]
-        """
+    def forward(self, x, H, W):
         B, L, C = x.shape
-        H, W = self.input_resolution
-        # print( B, L, C, H, W)
-        assert L == H * W, "Input feature has wrong size"
+        x = x.transpose(1, 2).view(B, C, H, W)         # → [B, C, H, W]
+        x = self.conv(x)                               # downsampling
+        H, W = H // 2, W // 2
+        x = x.flatten(2).transpose(1, 2)               # → [B, H*W, C']
+        x = self.norm(x)
+        return x, H, W
 
-        x = x.reshape(B, H, W, C)
-
-        # Split in 2x2 patches
-        x0 = x[:, 0::2, 0::2, :]  # top-left
-        x1 = x[:, 1::2, 0::2, :]  # bottom-left
-        x2 = x[:, 0::2, 1::2, :]  # top-right
-        x3 = x[:, 1::2, 1::2, :]  # bottom-right
-
-        # Concatenate along channel dim
-        x = torch.cat([x0, x1, x2, x3], dim=-1)  # shape: [B, H/2, W/2, 4*C]
-        x = x.reshape(B, -1, 4 * C)  # flatten again
-        x = self.norm(x.contiguous())
-        x = self.reduction(x)  # [B, H*W/4, 2*C]
-        return x
     
 class PatchExpanding(nn.Module):
     """ Patch Expanding """
@@ -380,76 +411,88 @@ class PatchExpanding(nn.Module):
         super().__init__()
         self.input_resolution = input_resolution
         self.dim = dim
-        self.expand = nn.Linear(dim, expand_ratio * dim, bias=False)
+        # self.expand = nn.Linear(dim, expand_ratio * dim, bias=False)
+        self.expand = nn.ConvTranspose2d(dim, dim // 2, kernel_size=2, stride=2)
         self.norm = norm_layer(dim // expand_ratio)
 
     def forward(self, x):
         B, L, C = x.shape
         H, W = self.input_resolution
-        #print(B, L, C, H, W)
         assert L == H * W, "wrong input shape"
 
-        x = self.expand(x)  # [B, L, 2*C]
-        x = x.view(B, H, W, -1)
-        x = rearrange(x, 'b h w (p1 p2 c) -> b (h p1 w p2) c', p1=2, p2=2, c=C // 2)
+        # Reshape naar beeldvorm voor conv
+        x = x.transpose(1, 2).view(B, C, H, W)  # [B, C, H, W]
+        x = self.expand(x)  # [B, C//2, H*2, W*2]
+        H, W = H * 2, W * 2
+        x = x.flatten(2).transpose(1, 2)  # terug naar [B, L, C]
         x = self.norm(x)
         return x
-
-
     
-
-class PatchExpand_LinearProjection(nn.Module):
-    """
-    Final Patch Expanding + Linear Projection to the 4 output fields 
-
-    Args:
-        input_resolution (tuple): bijv. (H/patch, W/patch)
-        dim (int): embed_dim
-        out_channels (int): aantal gewenste outputvelden per pixel
-        dim_scale (int): upsampling factor per dimensie (default 4)
-    """
-    def __init__(self, input_resolution, dim, out_channels, dim_scale=4, norm_layer=nn.LayerNorm):
+class FinalPatchExpanding(nn.Module):
+    def __init__(self, input_resolution, dim, expand_ratio=2, norm_layer=nn.LayerNorm):
         super().__init__()
         self.input_resolution = input_resolution
         self.dim = dim
-        self.out_channels = out_channels
-        self.dim_scale = dim_scale
-        self.output_dim = dim
-        self.expand = nn.Linear(dim, dim * (dim_scale ** 2), bias=False)
-        self.norm = norm_layer(self.output_dim)
 
-        self.output_proj = nn.Conv2d(in_channels=self.output_dim, out_channels=out_channels, kernel_size=1)
+        self.upsample = nn.Sequential(
+            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
+            nn.Conv2d(dim, dim, kernel_size=3, padding=1),
+            nn.GELU()
+        )
+        self.norm = norm_layer(dim)
 
     def forward(self, x):
+        B, L, C = x.shape
+        H, W = self.input_resolution
+        assert L == H * W, "wrong input shape"
+
+        x = x.transpose(1, 2).view(B, C, H, W)  # → [B, C, H, W]
+        x = self.upsample(x)  # upsample + conv
+        H, W = H * 2, W * 2
+        x = x.flatten(2).transpose(1, 2)
+        x = self.norm(x)
+        return x
+
+
+class LinearProjection(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.output_proj = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1)
+
+    def forward(self, x, H, W):
         """
         x: [B, H*W, C]
-        returns: [B, out_channels, H_up, W_up]
+        returns: [B, out_channels, H, W]
         """
-        H, W = self.input_resolution
-        x = self.expand(x)
-        B, L, C = x.shape
-        assert L == H * W, "input feature has wrong size"
 
-        # print(B, L, C, H,  W)
-
-        x = x.reshape(B, H, W, C)
-        # print("x shape after reshape 1: ", x.shape)
-
-        x = rearrange(x, 'b h w (p1 p2 c)-> b (h p1) (w p2) c', p1=self.dim_scale, p2=self.dim_scale,
-                      c=C // (self.dim_scale ** 2))
-        
-        x = x.reshape(B, -1, self.output_dim)
-
-        # print("x shape after reshape 2: ", x.shape)
-
-        x = self.norm(x)
-        # print("x shape after norm: ", x.shape) 
-        x = rearrange(x, 'b (h w) c-> b c h w', h= H * self.dim_scale, w= W*self.dim_scale)
-    
-        # print("x shape after reshape 3: ", x.shape)
+        if x.dim() == 3: 
+            B, L, C = x.shape
+            x = rearrange(x, 'b (h w) c -> b c h w', h=H, w=W)
         x = self.output_proj(x)
-
         return x
+    
+class RefinementBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.block = nn.Sequential(
+            nn.Conv2d(channels, channels, kernel_size=3, padding=1),
+            nn.GELU(),
+            nn.Conv2d(channels, channels, kernel_size=3, padding=1),
+        )
+        self.norm = nn.LayerNorm(channels)
+
+    def forward(self, x):
+        B, C, H, W = x.shape
+        residual = x
+        x = self.block(x)
+        x = x + residual
+        x = x.permute(0, 2, 3, 1).contiguous()  # [B, H, W, C]
+        x = self.norm(x)
+        x = x.permute(0, 3, 1, 2).contiguous()  # [B, C, H, W]
+        return x
+
+
+
         
 
 # SWIN TRANSFORMER BLOCK -> Block,  window_partition,  window_reverse, Mlp, WindowAttention 
@@ -519,7 +562,6 @@ class Block(nn.Module):
         x = x.reshape(B, H * W, C)
         x = self.norm1(x.contiguous())
         x = x.reshape(B, H, W, C)  # terug naar (B, H, W, C) om verder te werken
-
 
         # pad feature maps to multiples of window size
         pad_l = pad_t = 0
@@ -694,4 +736,3 @@ class WindowAttention(nn.Module):
         x = self.proj(x)
         x = self.proj_drop(x)
         return x
-

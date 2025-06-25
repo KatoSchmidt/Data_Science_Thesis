@@ -1,7 +1,8 @@
 _target_: the_well.benchmark.models.swinnet.SwinUnet
-#img_size: (128, 384)
 patch_size: 4
 embed_dim: 64
-num_heads: [4, 8, 16]
-depths: [2, 2, 4]
-num_bottleneck_blocks: 2
+num_heads: [4, 8, 16, 32]
+depths: [2, 2, 2]
+num_bottleneck_blocks: 4
+window_size: 8
+refinement: False

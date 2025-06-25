@@ -108,3 +108,14 @@ check_well_data_4059043.out
 
 # Ignore streamlit local runs
 .streamlit/
+
+#Addtional files
+*.zip
+*.tar.gz
+*.npz
+*.out
+*.err
+
+# Pycache
+__pycache__/
+*.pyc

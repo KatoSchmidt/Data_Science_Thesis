@@ -1,4 +1,4 @@
 # @package _global_
 data:
-  well_base_path:  "/home/kschmidt/the_well/datasets" #"/Users/katoschmidt/Desktop/the_well/datasets" #"/home/kschmidt/the_well/datasets"
+  well_base_path:  ""
 experiment_dir: "experiments/"

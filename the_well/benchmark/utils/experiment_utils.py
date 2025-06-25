@@ -23,7 +23,7 @@ def configure_paths(experiment_folder):
 def get_experiment_name(cfg: DictConfig) -> str:
     model_name = cfg.model._target_.split(".")[-1]
     # slurm_job_id = os.environ.get("SLURM_JOB_ID", "0") - Not using for now since I think it'll be easier to just use name alone
-    return f"{cfg.name}-{model_name}-{cfg.optimizer.lr}"
+    return f"{model_name}-{cfg.name}-{cfg.optimizer.lr}"
 
 
 def configure_experiment(
