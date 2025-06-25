@@ -1,4 +1,4 @@
-from .swin_transformer3 import SwinTransformerUnet
+from .swin_transformer import SwinTransformerUnet
 
 class SwinUnet(SwinTransformerUnet):
     def __init__(
