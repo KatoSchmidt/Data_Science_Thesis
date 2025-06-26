@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Videoresultaten</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Model Resultaten in Video's</h1>
+
+  <h2>SineNet-4</h2>
+  <div class="video-grid">
+    <video controls><source src="video/sinenet-4_0.03.mp4" type="video/mp4"></video>
+    <video controls><source src="video/sinenet-4_0.32.mp4" type="video/mp4"></video>
+    <video controls><source src="video/sinenet-4_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+  <h2>SineNet-8</h2>
+  <div class="video-grid">
+    <video controls><source src="video/sinenet-8_0.03.mp4" type="video/mp4"></video>
+    <video controls><source src="video/sinenet-8_0.32.mp4" type="video/mp4"></video>
+    <video controls><source src="video/sinenet-8_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+  <h2>SwinNet</h2>
+  <div class="video-grid">
+    <video controls><source src="video/swinnet_0.03.mp4" type="video/mp4"></video>
+    <video controls><source src="video/swinnet_0.32.mp4" type="video/mp4"></video>
+    <video controls><source src="video/swinnet_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+  <h2>SwinNet-R</h2>
+  <div class="video-grid">
+    <video controls><source src="video/swinnet_R_0.03.mp4" type="video/mp4"></video>
+    <video controls><source src="video/swinnet_R_0.32.mp4" type="video/mp4"></video>
+    <video controls><source src="video/swinnet_R_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+  <h2>UNetConvNext</h2>
+  <div class="video-grid">
+    <video controls><source src="video/unet_convnext_0.03.mp4" type="video/mp4"></video>
+    <video controls><source src="video/unet_convnext_0.32.mp4" type="video/mp4"></video>
+    <video controls><source src="video/unet_convnext_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+</body>
+</html>
