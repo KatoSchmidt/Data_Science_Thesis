@@ -1,63 +1,170 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Videoresultaten</title>
+  <meta charset="UTF-8" />
+  <title>Improving Turbulent Radiative Layer Predictions</title>
+  <!-- LaTeX-achtig font -->
+  <link href="https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap" rel="stylesheet">
+  <!-- MathJax voor formules -->
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 20px;
+      font-family: 'Latin Modern Roman', serif;
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+      line-height: 1.6;
     }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 0.2em;
+    }
+
+    .meta {
+      text-align: center;
+      font-size: 0.95em;
+      color: #555;
+      margin-bottom: 2em;
+    }
+
+    .intro {
+      margin-bottom: 3em;
+    }
+
     h2 {
-      margin-top: 40px;
+      margin-top: 3em;
+      font-size: 1.4em;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.3em;
     }
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+
+    h3 {
+      margin-top: 1.5em;
+      font-size: 1.1em;
     }
+
+    .video-block {
+      text-align: center;
+      margin-bottom: 2em;
+    }
+
     video {
-      width: 100%;
-      height: auto;
+      width: 80%;
+      max-width: 800px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    hr {
+      margin: 4em 0;
+      border: none;
+      border-top: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>Model Resultaten in Video's</h1>
 
-  <h2>SineNet-4</h2>
-  <div class="video-grid">
+  <h1>Improving Turbulent Radiative Layer Predictions Using Computer Vision</h1>
+
+  <div class="meta">
+    Kato Schmidt, Master Information Studies: Data Science, Faculty of Science, University of Amsterdam<br>
+    Under supervision of: Ana Lucic
+  </div>
+
+  <div class="intro">
+    <!-- Introductie tekst komt hier -->
+  </div>
+
+  <!-- === t_cool = 0.03 === -->
+  <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.03 \)</h2>
+
+  <div class="video-block">
+    <h3>CNextU-net</h3>
+    <video controls><source src="video/unet_convnext_0.03.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SineNet-4</h3>
     <video controls><source src="video/sinenet-4_0.03.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SineNet-8</h3>
+    <video controls><source src="video/sinenet-8_0.03.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SwinNet</h3>
+    <video controls><source src="video/swinnet_0.03.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SwinNet-R</h3>
+    <video controls><source src="video/swinnet_R_0.03.mp4" type="video/mp4"></video>
+  </div>
+
+  <hr>
+
+  <!-- === t_cool = 0.32 === -->
+  <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.32 \)</h2>
+
+  <div class="video-block">
+    <h3>CNextU-net</h3>
+    <video controls><source src="video/unet_convnext_0.32.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SineNet-4</h3>
     <video controls><source src="video/sinenet-4_0.32.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SineNet-8</h3>
+    <video controls><source src="video/sinenet-8_0.32.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SwinNet</h3>
+    <video controls><source src="video/swinnet_0.32.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SwinNet-R</h3>
+    <video controls><source src="video/swinnet_R_0.32.mp4" type="video/mp4"></video>
+  </div>
+
+  <hr>
+
+  <!-- === t_cool = 3.16 === -->
+  <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 3.16 \)</h2>
+
+  <div class="video-block">
+    <h3>CNextU-net</h3>
+    <video controls><source src="video/unet_convnext_3.16.mp4" type="video/mp4"></video>
+  </div>
+
+  <div class="video-block">
+    <h3>SineNet-4</h3>
     <video controls><source src="video/sinenet-4_3.16.mp4" type="video/mp4"></video>
   </div>
 
-  <h2>SineNet-8</h2>
-  <div class="video-grid">
-    <video controls><source src="video/sinenet-8_0.03.mp4" type="video/mp4"></video>
-    <video controls><source src="video/sinenet-8_0.32.mp4" type="video/mp4"></video>
+  <div class="video-block">
+    <h3>SineNet-8</h3>
     <video controls><source src="video/sinenet-8_3.16.mp4" type="video/mp4"></video>
   </div>
 
-  <h2>SwinNet</h2>
-  <div class="video-grid">
-    <video controls><source src="video/swinnet_0.03.mp4" type="video/mp4"></video>
-    <video controls><source src="video/swinnet_0.32.mp4" type="video/mp4"></video>
+  <div class="video-block">
+    <h3>SwinNet</h3>
     <video controls><source src="video/swinnet_3.16.mp4" type="video/mp4"></video>
   </div>
 
-  <h2>SwinNet-R</h2>
-  <div class="video-grid">
-    <video controls><source src="video/swinnet_R_0.03.mp4" type="video/mp4"></video>
-    <video controls><source src="video/swinnet_R_0.32.mp4" type="video/mp4"></video>
+  <div class="video-block">
+    <h3>SwinNet-R</h3>
     <video controls><source src="video/swinnet_R_3.16.mp4" type="video/mp4"></video>
-  </div>
-
-  <h2>UNetConvNext</h2>
-  <div class="video-grid">
-    <video controls><source src="video/unet_convnext_0.03.mp4" type="video/mp4"></video>
-    <video controls><source src="video/unet_convnext_0.32.mp4" type="video/mp4"></video>
-    <video controls><source src="video/unet_convnext_3.16.mp4" type="video/mp4"></video>
   </div>
 
 </body>
