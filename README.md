@@ -1,8 +1,8 @@
 # Improving Turbulent Radiative Layer Predictions Using Computer Vision
 
-Master Information Studies: Data Science 
-Faculty of Science
-University of Amsterdam
+Master Information Studies: Data Science \
+Faculty of Science \
+University of Amsterdam \ 
 
 **Author**: Kato Mari Roos Schmidt  
 **Email**: kato.schmidt@student.uva.nl  
