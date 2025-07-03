@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://www.uva.nl/binaries/content/gallery/uva/logo-uva.png" alt="UvA Logo" width="200"/>
-
 # Improving Turbulent Radiative Layer Predictions Using Computer Vision
 
 **Author**: Kato Mari Roos Schmidt  
@@ -11,7 +9,7 @@
 
 ---
 
-<img src="Data_Science_Thesis/video/example_input.jpeg" alt="Model or Result Visualization" width="600"/>
+<img src="/video/example_input.jpeg" alt="Model or Result Visualisation" width="600"/>
 
 ---
 
