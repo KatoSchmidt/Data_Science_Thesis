@@ -5,8 +5,7 @@
   <title>Improving Turbulent Radiative Layer Predictions</title>
   <link href="https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap" rel="stylesheet">
   <script type="text/javascript" id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
     body {
       font-family: 'Latin Modern Roman', serif;
@@ -18,7 +17,7 @@
     .page {
       background-color: white;
       margin: 0 auto;
-      width: 92%;
+      width: 88%;
       padding: 40px;
       box-sizing: border-box;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
@@ -38,9 +37,51 @@
     }
 
     .intro {
-      margin-bottom: 3em;
+      margin-bottom: 2em;
       font-size: 1em;
       line-height: 1.6;
+    }
+
+    /* === Tabs === */
+    .tabs {
+      display: flex;
+      width: 100%;
+      margin-bottom: 2em;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .tab {
+      flex-grow: 1;
+      text-align: center;
+      padding: 12px;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, background-color 0.2s;
+      background-color: #f0f0f0;
+      border-right: 1px solid #ddd;
+    }
+
+    .tab:last-child {
+      border-right: none;
+    }
+
+    .tab:hover {
+      box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.1);
+      background-color: #eaeaea;
+    }
+
+    .tab.active {
+      background-color: white;
+      box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.1);
+      font-weight: bold;
+    }
+
+    /* === Tab Content === */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     h2 {
@@ -70,7 +111,6 @@
 </head>
 <body>
   <div class="page">
-
     <h1>Improving Turbulent Radiative Layer Predictions Using Computer Vision</h1>
 
     <div class="meta">
@@ -79,64 +119,68 @@
     </div>
 
     <div class="intro">
-      This page presents videos of different models performing autoregressive predictions on the 2D Turbulent Radiative Layer dataset. These visualizations are the result of the thesis research: <strong>Improving Turbulent Radiative Layer Predictions Using Computer Vision</strong>. To explore the full code and research, visit the repository:
+      This page presents videos of different models performing autoregressive predictions on the 2D Turbulent Radiative Layer dataset. These visualisations are the result of the thesis research: <strong>Improving Turbulent Radiative Layer Predictions Using Computer Vision</strong>. To explore the full code and research, visit the repository:
       <a href="https://github.com/KatoSchmidt/Data_Science_Thesis.git" target="_blank">github.com/KatoSchmidt/Data_Science_Thesis</a>.
     </div>
 
-    <!-- === t_cool = 0.03 === -->
-    <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.03 \)</h2>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab(0)">t<sub>cool</sub> = 0.03</div>
+      <div class="tab" onclick="showTab(1)">t<sub>cool</sub> = 0.32</div>
+      <div class="tab" onclick="showTab(2)">t<sub>cool</sub> = 3.16</div>
+    </div>
 
-    <div class="video-block"><h3>CNextU-net</h3>
-      <video controls><source src="video/unet_convnext_0.03.mp4" type="video/mp4"></video></div>
+    <div class="tab-content active">
+      <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.03 \)</h2>
+      <div class="video-block"><h3>CNextU-net</h3>
+        <video controls><source src="video/unet_convnext_0.03.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-4</h3>
+        <video controls><source src="video/sinenet-4_0.03.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-8</h3>
+        <video controls><source src="video/sinenet-8_0.03.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet</h3>
+        <video controls><source src="video/swinnet_0.03.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet-R</h3>
+        <video controls><source src="video/swinnet_R_0.03.mp4" type="video/mp4"></video></div>
+    </div>
 
-    <div class="video-block"><h3>SineNet-4</h3>
-      <video controls><source src="video/sinenet-4_0.03.mp4" type="video/mp4"></video></div>
+    <div class="tab-content">
+      <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.32 \)</h2>
+      <div class="video-block"><h3>CNextU-net</h3>
+        <video controls><source src="video/unet_convnext_0.32.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-4</h3>
+        <video controls><source src="video/sinenet-4_0.32.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-8</h3>
+        <video controls><source src="video/sinenet-8_0.32.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet</h3>
+        <video controls><source src="video/swinnet_0.32.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet-R</h3>
+        <video controls><source src="video/swinnet_R_0.32.mp4" type="video/mp4"></video></div>
+    </div>
 
-    <div class="video-block"><h3>SineNet-8</h3>
-      <video controls><source src="video/sinenet-8_0.03.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet</h3>
-      <video controls><source src="video/swinnet_0.03.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet-R</h3>
-      <video controls><source src="video/swinnet_R_0.03.mp4" type="video/mp4"></video></div>
-
-    <!-- === t_cool = 0.32 === -->
-    <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 0.32 \)</h2>
-
-    <div class="video-block"><h3>CNextU-net</h3>
-      <video controls><source src="video/unet_convnext_0.32.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SineNet-4</h3>
-      <video controls><source src="video/sinenet-4_0.32.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SineNet-8</h3>
-      <video controls><source src="video/sinenet-8_0.32.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet</h3>
-      <video controls><source src="video/swinnet_0.32.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet-R</h3>
-      <video controls><source src="video/swinnet_R_0.32.mp4" type="video/mp4"></video></div>
-
-    <!-- === t_cool = 3.16 === -->
-    <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 3.16 \)</h2>
-
-    <div class="video-block"><h3>CNextU-net</h3>
-      <video controls><source src="video/unet_convnext_3.16.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SineNet-4</h3>
-      <video controls><source src="video/sinenet-4_3.16.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SineNet-8</h3>
-      <video controls><source src="video/sinenet-8_3.16.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet</h3>
-      <video controls><source src="video/swinnet_3.16.mp4" type="video/mp4"></video></div>
-
-    <div class="video-block"><h3>SwinNet-R</h3>
-      <video controls><source src="video/swinnet_R_3.16.mp4" type="video/mp4"></video></div>
-
+    <div class="tab-content">
+      <h2>Autoregressive rollout predictions for 30 timesteps, with \( t_\mathrm{cool} = 3.16 \)</h2>
+      <div class="video-block"><h3>CNextU-net</h3>
+        <video controls><source src="video/unet_convnext_3.16.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-4</h3>
+        <video controls><source src="video/sinenet-4_3.16.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SineNet-8</h3>
+        <video controls><source src="video/sinenet-8_3.16.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet</h3>
+        <video controls><source src="video/swinnet_3.16.mp4" type="video/mp4"></video></div>
+      <div class="video-block"><h3>SwinNet-R</h3>
+        <video controls><source src="video/swinnet_R_3.16.mp4" type="video/mp4"></video></div>
+    </div>
   </div>
+
+  <script>
+    function showTab(index) {
+      const tabs = document.querySelectorAll('.tab');
+      const contents = document.querySelectorAll('.tab-content');
+      tabs.forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+        contents[i].classList.toggle('active', i === index);
+      });
+    }
+  </script>
 </body>
 </html>
