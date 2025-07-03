@@ -1,12 +1,19 @@
+<div align="center">
+
+<img src="https://www.uva.nl/binaries/content/gallery/uva/logo-uva.png" alt="UvA Logo" width="200"/>
+
 # Improving Turbulent Radiative Layer Predictions Using Computer Vision
 
-Master Information Studies: Data Science \
-Faculty of Science \
-University of Amsterdam \ 
-
 **Author**: Kato Mari Roos Schmidt  
+**Student ID**: 13403052  
 **Email**: kato.schmidt@student.uva.nl  
 **Supervisor**: Ana Lucic (UvA) – a.lucic@uva.nl
+
+---
+
+<img src="Data_Science_Thesis/example_image.jpeg" alt="Model or Result Visualization" width="600"/>
+
+---
 
 ## Abstract
 
@@ -16,6 +23,8 @@ Existing benchmarks, such as CNextU-Net, set a strong baseline but leave room fo
 
 Results show that SineNet variants outperform the benchmark in short-term prediction, while SwinNet offers more stable performance in long rollouts. However, none of the models achieve consistent gains across all tasks. A persistent challenge is the accurate prediction of the pressure field, which dominates error accumulation. These findings clarify the trade-offs between architectural design, model performance, and computational efficiency in turbulent systems, and highlight refinement-based approaches or those combining the strengths of SineNet and SwinNet as a promising path for future improvement.
 
-## Keywords
+---
 
-Turbulent Radiative Layer, Computer Vision, Deep Learning, Autoregressive Rollout
+**Keywords**: *Turbulent Radiative Layer, Computer Vision, Deep Learning, Autoregressive Rollout*
+
+</div>
