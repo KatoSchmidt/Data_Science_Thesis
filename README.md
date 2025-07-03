@@ -11,7 +11,7 @@
 
 ---
 
-<img src="Data_Science_Thesis/video/example_image.jpeg" alt="Model or Result Visualization" width="600"/>
+<img src="Data_Science_Thesis/video/example_input.jpeg" alt="Model or Result Visualization" width="600"/>
 
 ---
 
